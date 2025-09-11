@@ -1,18 +1,20 @@
 package main
 
-import ("fmt")
+import (
+	"fmt"
+)
 
 // Tâche 5 : Potion de vie
 
-// Créez une fonction takePot qui permet d’utiliser une potion dans l’inventaire. 
-// Vous pouvez l’utiliser dans le menu de « Accéder à l’inventaire ». 
-// Lorsque vous utilisez une potion, celle-ci se consomme (supprimée de l’inventaire) et vous regagnez 50 points de vie actuel. 
+// Créez une fonction takePot qui permet d’utiliser une potion dans l’inventaire.
+// Vous pouvez l’utiliser dans le menu de « Accéder à l’inventaire ».
+// Lorsque vous utilisez une potion, celle-ci se consomme (supprimée de l’inventaire) et vous regagnez 50 points de vie actuel.
 // Puis affichez les points de vie actuel sur les points de vie max du personnage.
 // Les points de vie actuels ne peuvent pas excéder les points de vie maximum
 
 func (personnage *Character) TakePot() {
-	for i, item := range personnage.Inventory {
-		if item == "Fairy" {
+	for i := len(personnage.Inventory) - 1; i >= 0; i-- {
+		if personnage.Inventory[i] == "Fairy" {
 			// Soigne le personnage
 			personnage.PV += 50
 			if personnage.PV > personnage.Max_PV {
@@ -20,7 +22,7 @@ func (personnage *Character) TakePot() {
 			}
 			fmt.Println(personnage.Name, "utilise une Fée ! PV =", personnage.PV, "/", personnage.Max_PV)
 
-			// Retire la potion de l'inventaire
+			// Retire la potion de l'inventaire (on vide la case)
 			personnage.Inventory[i] = ""
 			return
 		}
