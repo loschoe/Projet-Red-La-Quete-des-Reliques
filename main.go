@@ -89,7 +89,8 @@ func main() {
         color.Cyan("\nMENU")
         color.Blue("Informations personnage [P]")
         color.Blue("Accéder à l’inventaire [I]")
-        color.Blue("Utiliser une potion [U]")
+        color.Blue("Utiliser une potion de soin [S]")
+        color.color.HiGreen("Utiliser une potion de poison [O]")
         color.Red("Quitter le jeu [Exit]")
 
         var choice string
