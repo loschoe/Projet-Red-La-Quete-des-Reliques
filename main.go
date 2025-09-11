@@ -40,11 +40,10 @@ ___--	'--~~____|     |+++++__|----~    ~---,
 	color.Cyan("%s\n", asciiArt)
 	color.Red("%s\n", introText)
 
-	// Attendre que l’utilisateur appuie sur Entrée
 	fmt.Scanln()
 }
 
-// Définition du personnage
+// Tâche 1 : Définition du personnage 
 type Character struct {
 	Name      string
 	Classe    string
@@ -54,7 +53,7 @@ type Character struct {
 	Inventory [10]string
 }
 
-// Initialisation du personnage
+// Tâche 2 : Initialisation du personnage
 func initCharacter(name string, classe string, level int, max_pv int, pv int, inventory [10]string) Character {
 	if pv > max_pv {
 		pv = max_pv
@@ -69,13 +68,13 @@ func initCharacter(name string, classe string, level int, max_pv int, pv int, in
 	}
 }
 
-// Affichage des informations
+// Tâche 3 : Affichage des informations
 func displayInfo(c Character) {
 	fmt.Printf("\nName : %s\nClasse : %s\nLevel : %d\nPV : %d/%d\nInventory : %v\n",
 		c.Name, c.Classe, c.Level, c.PV, c.Max_PV, c.Inventory)
 }
 
-// Affichage de l'inventaire
+// Tâche 4 : Affichage de l'inventaire
 func accessInventory(inventory [10]string) {
 	fmt.Println("\nInventaire du personnage :")
 	empty := true
@@ -90,7 +89,7 @@ func accessInventory(inventory [10]string) {
 	}
 }
 
-// Utilisation d'une potion
+// Tâche 5 : Utilisation d'une potion de soin (renommée Fairy)
 func (personnage *Character) TakePot() {
 	for i, item := range personnage.Inventory {
 		if item == "Fairy" {
@@ -106,7 +105,7 @@ func (personnage *Character) TakePot() {
 	fmt.Println("Aucune Potion Fée n'est disponible dans l'inventaire.")
 }
 
-// Tâche 9 : inflige 10 PV de dégâts par seconde pendant 3s (30 PV au total)
+// Tâche 9 : Utilisation d'une potion de poison (renommée miasme)
 func (personnage *Character) PoisonPot() {
 	for i, item := range personnage.Inventory {
 		if item == "Miasme" {
@@ -128,13 +127,13 @@ func (personnage *Character) PoisonPot() {
 				// Si le personnage meurt, on arrête
 				if personnage.PV == 0 {
 					fmt.Println(personnage.Name, "a succombé à ses blessures !")
-					personnage.RemoveItemAt(i) // 🔥 retirer le miasme
+					personnage.RemoveItemAt(i)
 					return
 				}
 			}
 
 			fmt.Println("Le miasme n’a plus d’effet")
-			personnage.RemoveItemAt(i) // 🔥 retirer le miasme
+			personnage.RemoveItemAt(i)
 			return
 		}
 	}
@@ -146,45 +145,50 @@ func (personnage *Character) RemoveItemAt(index int) {
 	for j := index; j < len(personnage.Inventory)-1; j++ {
 		personnage.Inventory[j] = personnage.Inventory[j+1]
 	}
-	personnage.Inventory[len(personnage.Inventory)-1] = "" // vide la dernière case
+	personnage.Inventory[len(personnage.Inventory)-1] = ""
 }
 
 
 // Fonction menu
-func menu(c1 Character) {
+func menu(c1 *Character){
 	for {
 		color.Cyan("\nMENU")
 		color.Blue("- Informations personnage [P]")
 		color.Blue("- Accéder à l’inventaire [I]")
-		color.Green("- Utiliser une potion [U]")
-		color.Green("- Magasin [M]")
-		color.Red("\n - Quitter le jeu [Exit]")
+		color.Green("- Utiliser une potion [S]")
+        color.HiGreen("- Utiliser une potion de poison [U]")
+		color.HiBlack("- Magasin [M]")
+        color.HiBlack("- Forgeron [F]")
+		color.Red("\n- Quitter le jeu [Exit]")
 
 		var choice string
 		color.Yellow("\nVers quel menu souhaitez-vous aller ? ")
 		fmt.Scanln(&choice)
 
-		switch choice {
+				switch choice {
 		case "P":
-			displayInfo(c1)
+			displayInfo(*c1)
 		case "I":
 			accessInventory(c1.Inventory)
-		case "U":
+		case "S":
 			c1.TakePot()
-		case "M":
+		case "U":
 			c1.PoisonPot()
+		case "M":
+			color.HiBlack("Magasin : Pas encore codé")
+		case "F":
+			color.HiBlack("Forgeron : Pas encore codé")
 		case "Exit":
 			color.Red("Fermeture du jeu...")
 			return
 		default:
 			color.Red("Choix non reconnu")
-		}
+        }
 	}
 }
 
 // Fonction main
 func main() {
-	// Étape 1 : démarrage avec ascii art + Entrée
 	startGame()
 
 	// Inventaire initial
@@ -196,25 +200,14 @@ func main() {
 
 	c1 := initCharacter("Link", "Hylien", 1, 500, 100, inventory)
 
-<<<<<<< HEAD
-    // Tâche 6 : Menu 
-    for {
-        color.Cyan("\nMENU")
-        color.Blue("Informations personnage [P]")
-        color.Blue("Accéder à l’inventaire [I]")
-        color.Blue("Utiliser une potion de soin [S]")
-        color.color.HiGreen("Utiliser une potion de poison [O]")
-        color.Red("Quitter le jeu [Exit]")
-=======
 	// Remplacer les cases vides par "..."
 	for i, item := range c1.Inventory {
 		if item == "" {
 			c1.Inventory[i] = "..."
 		}
 	}
->>>>>>> 7df976a00bead96f40b038bdd21160441019a65e
 
 	// Étape 2 : lancement du menu
-	menu(c1)
+	menu(&c1)
 }
 
