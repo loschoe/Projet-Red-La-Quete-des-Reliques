@@ -27,6 +27,12 @@ func initCharacter(name string, classe string, level int, max_pv int, pv int, in
 	}
 }
 
+// Tâche 3 : Affichage des informations du personnage 
+func displayInfo(c Character) { 
+	fmt.Printf("Name : %s\nClasse : %s\nLevel : %d\nPV : %d/%d\nInventory : %v\n",
+		c.Name, c.Classe, c.Level, c.PV, c.Max_PV, c.Inventory)
+}
+
 // Tâche 4 : Affichage du contenu de l'inventaire du personnage 
 func accessInventory(inventory []string) {
     fmt.Println("Inventaire du personnage :")
@@ -42,8 +48,7 @@ func accessInventory(inventory []string) {
 // Tâche 5 : Utilisation de la potion de vie
 func (personnage *Character) TakePot() {
 	for i, item := range personnage.Inventory {
-		if item == "Fairy" {
-			// Soigne le personnage
+		if item == "Fairy" { // Potion de soin 
 			personnage.PV += 50
 			if personnage.PV > personnage.Max_PV {
 				personnage.PV = personnage.Max_PV
@@ -69,7 +74,14 @@ func main() {
 	// Initialisation du personnage C1
 	c1 := initCharacter("Link", "Hylien", 1, 500, 100, inventory)
 
-	// Affichage du personnage
-	fmt.Printf("Name : %s\nClasse : %s\nLevel : %d\nPV : %d/%d\nInventory : %v\n",
-		c1.Name, c1.Classe, c1.Level, c1.PV, c1.Max_PV, c1.Inventory)
+	// Parcourir l'inventaire et remplacer les cases vides par "..."
+	for i, item := range c1.Inventory {
+		if item == "" {
+			c1.Inventory[i] = "..."
+		}
+	}
+
+	// Afficher les informations du personnage 
+	displayInfo(c1)
+
 }
