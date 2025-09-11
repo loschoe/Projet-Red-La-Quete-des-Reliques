@@ -112,7 +112,7 @@ func menu(c1 Character) {
 		color.Blue("- Informations personnage [P]")
 		color.Blue("- Accéder à l’inventaire [I]")
 		color.Green("- Utiliser une potion [U]")
-		color.Orange("- Magasin [M]")
+		color.Green("- Magasin [M]")
 		color.Red("\n - Quitter le jeu [Exit]")
 
 		var choice string
