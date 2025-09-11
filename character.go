@@ -9,6 +9,4 @@ type Character struct
 	Level int
 	Max_PV int 
 	PV int 
-	Inventory [10]string 
-
-	
+	Inventory [10]string 	

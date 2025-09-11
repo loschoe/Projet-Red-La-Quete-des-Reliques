@@ -13,11 +13,11 @@ package main
 
 func initCharacter(name string, classe string, level int, max_pv int, pv int, inventory [10]string) Character { 
 	return Character{
-		Nom:        nom,
+		Name:		name,
 		Classe:     classe,
-		Niveau:     niveau,
-		PVMax:      pvMax,
-		PVActuels:  pvActuels,
-		Inventaire: inventaire,
+		Level:		Level,
+		Max_PV:     max_pv,
+		PV:  		pv,
+		Inventory: inventory,
 	}
 }
