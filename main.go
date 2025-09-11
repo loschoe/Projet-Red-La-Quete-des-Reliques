@@ -24,6 +24,38 @@ func initCharacter(name string, classe string, level int, max_pv int, pv int, in
 	}
 }
 
+// Tâche 4 : Affichage du contenu de l'inventaire du personnage 
+func accessInventory(inventory []string) {
+    fmt.Println("Inventaire du personnage :")
+    if len(inventory) == 0 {
+        fmt.Println("L'inventaire est vide.")
+        return
+    }
+	for i, item := range inventory {
+        fmt.Printf("%d. %s\n", i+1, item)
+    }
+}
+
+// Tâche 5 : Utilisation de la potion de vie
+func (personnage *Character) TakePot() {
+	for i, item := range personnage.Inventory {
+		if item == "Fairy" {
+			// Soigne le personnage
+			personnage.PV += 50
+			if personnage.PV > personnage.Max_PV {
+				personnage.PV = personnage.Max_PV
+			}
+			fmt.Println(personnage.Name, "utilise une Fée ! PV =", personnage.PV, "/", personnage.Max_PV)
+
+			// Retire la potion de l'inventaire
+			personnage.Inventory[i] = ""
+			return
+		}
+	}
+	fmt.Println("Aucune Potion Fée n'est disponible dans l'inventaire.")
+}
+
+
 func main(){
 	// Inventaire au départ !
 	inventory := [10]{"Fairy", "Fairy", "Fairy"}
