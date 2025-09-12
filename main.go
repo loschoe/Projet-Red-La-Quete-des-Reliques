@@ -76,7 +76,7 @@ func initCharacter(name string, classe string, level int, max_pv int, pv int, in
 		Max_PV:    max_pv,
 		PV:        pv,
 		Inventory: inventory,
-		Rubis:     10, 
+		Rubis:     10, // Initialiser avec 10 Rubis
 	}
 }
 
@@ -118,7 +118,7 @@ func (personnage *Character) TakePot() {
 			return
 		}
 	}
-	fmt.Println("Aucune Potion Fée n'est disponible dans l'inventaire.")
+	fmt.Println("Aucune Fée n'est disponible dans l'inventaire.")
 }
 
 // Ajouter un item dans la première case libre
@@ -135,6 +135,7 @@ func (personnage *Character) AddInventory(item string) {
             return
         }
     }
+    fmt.Println("Inventaire plein ! Impossible d'ajouter", item)
 }
 
 // Tâche 7 : Supprimer le premier exemplaire d'un item précis
@@ -146,7 +147,7 @@ func (personnage *Character) RemoveItem(item string) {
 			return
 		}
 	}
-	fmt.Println("Aucun", item, "n'a été trouvé dans l'inventaire.")
+	fmt.Println("Aucun(e)", item, "n'a été trouvé dans l'inventaire.")
 }
 
 // Compter combien d'exemplaires d'un item précis
@@ -185,6 +186,7 @@ func printShop(shopItems []ShopItem) {
 
 
 // La fonction du marchand (Marchand complet)
+
 func Merchant(personnage *Character) {
 	shopArt := `
                               _       
@@ -209,7 +211,7 @@ func Merchant(personnage *Character) {
 	if !personnage.HasReceivedDiamond {
 		personnage.AddInventory("Diamant")
 		personnage.HasReceivedDiamond = true
-		fmt.Println("Vous avez reçu un 💎 gratuitement ! \n")
+		fmt.Println("Vous avez reçu un Diamant gratuit !")
 	}
 
 	for {
@@ -236,11 +238,11 @@ func Merchant(personnage *Character) {
 
 		// Vérification des fonds
 		if selectedItem.PriceRubis > personnage.Rubis {
-			fmt.Println("Vous n'avez pas assez de Rubis pour cet item !")
+			fmt.Println("Vous n'avez pas assez de Rubis pour acheter cet item !")
 			continue
 		}
 		if selectedItem.PriceDiam > personnage.CountItem("Diamant") {
-			fmt.Println("Vous n'avez pas assez de Diamants pour cet item !")
+			fmt.Println("Vous n'avez pas assez de Diamants pour obtenir cet item !")
 			continue
 		}
 
@@ -263,16 +265,13 @@ func Merchant(personnage *Character) {
 		fmt.Println(selectedItem.Name, "a été ajouté à votre inventaire !")
 
 		shopItems = append(shopItems[:choix-1], shopItems[choix:]...)
-	
-
-	 // Si plus d'items, sortie automatique
-    if len(shopItems) == 0 {
-    	fmt.Println("Le marchand n'a plus d'items à vendre. Retour au menu principal.")
-        return
-		}
 	}
+
+	fmt.Println("Le marchand n'a plus d'items à vendre. Retour au menu principal.")
 }
 
+
+// Tâche 9 : Utilisation d'une potion de poison (renommée miasme)
 func (personnage *Character) PoisonPot() {
 	for i, item := range personnage.Inventory {
 		if item == "Miasme" {
@@ -394,7 +393,7 @@ func main() {
 		}
 	}
 
-	// Étape 2 : lancement du menu
+	// Étape 2 : lancements 
 	menu(&c1)
 	c1.IsDead()
 }
