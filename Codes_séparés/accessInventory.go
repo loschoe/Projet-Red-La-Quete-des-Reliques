@@ -31,9 +31,20 @@ func (personnage *Character) RemoveInventory(pos int) {
 	personnage.Inventory[pos-1] = ""
 }
 
+// Compte combien d'exemplaires d'un item précis sont dans l'inventaire
+func (personnage *Character) CountItem(item string) int {
+	count := 0
+	for _, i := range personnage.Inventory {
+		if i == item {
+			count++
+		}
+	}
+	return count
+}
+
 
 // Créez la fonction accessInventory qui permet d’afficher tous les items présents dans l’inventaire du personnage qui seront utilisables par la suite
-func (personnage *Character) accessInventory(inventory []string) {
+func (personnage *Character) accessInventory() {
 	fmt.Println("Inventaire du personnage :")
 
 	vide := true
@@ -53,12 +64,25 @@ func (personnage *Character) accessInventory(inventory []string) {
 
 func Merchant(personnage *Character) {
 	fmt.Println("Bienvenue dans ma boutique ! Voici ce que j'ai en stock :")
-	shopItems := []string{"Fairy", "PoisonPot", "Sword", "Shield"}
+	shopItems := [5]string{"5X Arrow", "5X Arrow", "Master Sword", "PoisonPot", "Divine Venison"}
 
 	// Affichage des items
 	for i, item := range shopItems {
 		fmt.Printf("%d. %s\n", i+1, item)
 	}
+	fmt.Println("Pour débloquer le Bouclier d'Hylia vous devez terminer 5 entraînements.")
+	fmt.Println("En attendant, je vous offre gratuitement votre premier diamant ! Il vous servira pour acheter l'épée de légende.")
+
+	// Ajouter le diams, gérer le système de prix/d'achats 
+	// Le diamant est donné QUE lors de la première visite
+	
+	personnage.AddInventory("Diamant")
+	fmt.Println("Vous avez reçu un Diamant !")
+
+	
+
+
+
 	fmt.Println("0. Quitter")
 
 	// Choix du joueur
@@ -81,4 +105,3 @@ func Merchant(personnage *Character) {
 	personnage.AddInventory(selectedItem)
 	fmt.Println(selectedItem, "a été ajouté à votre inventaire !")
 }
-

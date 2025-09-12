@@ -45,12 +45,14 @@ ___--	'--~~____|     |+++++__|----~    ~---,
 
 // Tâche 1 : Définition du personnage 
 type Character struct {
-	Name      string
-	Classe    string
-	Level     int
-	Max_PV    int
-	PV        int
-	Inventory [10]string
+	Name               string
+	Classe             string
+	Level              int
+	Max_PV             int
+	PV                 int
+	Inventory          [10]string
+	HasReceivedDiamond bool
+	Rubis              int
 }
 
 // Tâche 2 : Initialisation du personnage
@@ -65,6 +67,7 @@ func initCharacter(name string, classe string, level int, max_pv int, pv int, in
 		Max_PV:    max_pv,
 		PV:        pv,
 		Inventory: inventory,
+		Rubis:     10, // Initialiser avec 10 Rubis
 	}
 }
 
@@ -74,19 +77,23 @@ func displayInfo(c Character) {
 		c.Name, c.Classe, c.Level, c.PV, c.Max_PV, c.Inventory)
 }
 
-// Tâche 4 : Affichage de l'inventaire
-func accessInventory(inventory [10]string) {
-	fmt.Println("\nInventaire du personnage :")
-	empty := true
-	for i, item := range inventory {
-		if item != "..." && item != "" {
-			fmt.Printf("%d. %s\n", i+1, item)
-			empty = false
-		}
-	}
-	if empty {
-		fmt.Println("L'inventaire est vide.")
-	}
+// Afficher l'inventaire
+func (personnage *Character) accessInventory() {
+    fmt.Println("\nInventaire du personnage :")
+    vide := true
+    for i, item := range personnage.Inventory {
+        if item == "" || item == "..." {
+            fmt.Printf("%d. [vide]\n", i+1)
+        } else {
+            fmt.Printf("%d. %s (utilisable)\n", i+1, item)
+            vide = false
+        }
+    }
+    if vide {
+        fmt.Println("L'inventaire de votre personnage est vide.")
+    }
+    fmt.Println("Rubis disponibles :", personnage.Rubis)
+    fmt.Println()
 }
 
 // Tâche 5 : Utilisation d'une potion de soin (renommée Fairy)
@@ -104,6 +111,132 @@ func (personnage *Character) TakePot() {
 	}
 	fmt.Println("Aucune Potion Fée n'est disponible dans l'inventaire.")
 }
+
+// Ajouter un item dans la première case libre ("" ou "...")
+func (personnage *Character) AddInventory(item string) {
+    for i := 0; i < len(personnage.Inventory); i++ {
+        if personnage.Inventory[i] == "" || personnage.Inventory[i] == "..." {
+            personnage.Inventory[i] = item
+            fmt.Println(item, "a été ajouté à l'inventaire avec succès !")
+            return
+        }
+    }
+    fmt.Println("Inventaire plein ! Impossible d'ajouter", item)
+}
+
+// Tâche 7 : Supprimer le premier exemplaire d'un item précis
+func (personnage *Character) RemoveItem(item string) {
+	for idx, i := range personnage.Inventory {
+		if i == item {
+			personnage.Inventory[idx] = ""
+			fmt.Println(item, "a été retiré de l'inventaire.")
+			return
+		}
+	}
+	fmt.Println("Aucun", item, "n'a été trouvé dans l'inventaire.")
+}
+
+// Compter combien d'exemplaires d'un item précis
+func (personnage *Character) CountItem(item string) int {
+	count := 0
+	for _, i := range personnage.Inventory {
+		if i == item {
+			count++
+		}
+	}
+	return count
+}
+
+// La fonction du marchand (Marchand complet)
+
+func Merchant(personnage *Character) {
+	fmt.Println("\nBienvenue dans ma boutique !")
+
+	type ShopItem struct {
+		Name       string
+		PriceRubis int
+		PriceDiam  int
+		EffectPV   int
+	}
+
+	shopItems := []ShopItem{
+		{"5X Arrow", 10, 0, 0},
+		{"5X Arrow", 10, 0, 0},
+		{"Master Sword", 0, 3, 0},
+		{"PoisonPot", 25, 0, 0},
+		{"Divine Venison", 50, 0, 25},
+	}
+
+	if !personnage.HasReceivedDiamond {
+		personnage.AddInventory("Diamant")
+		personnage.HasReceivedDiamond = true
+		fmt.Println("Vous avez reçu un Diamant gratuit !")
+	}
+
+	for len(shopItems) > 0 {
+		fmt.Println("\nItems disponibles :")
+		for i, item := range shopItems {
+			fmt.Printf("%d. %s", i+1, item.Name)
+			if item.PriceRubis > 0 {
+				fmt.Printf(" - %d Rubis", item.PriceRubis)
+			}
+			if item.PriceDiam > 0 {
+				fmt.Printf(" - %d Diamants", item.PriceDiam)
+			}
+			fmt.Println()
+		}
+		fmt.Println("0. Quitter")
+		fmt.Println("Pour débloquer le Bouclier d'Hylia, vous devez terminer 5 entraînements.")
+		fmt.Println("Rubis disponibles :", personnage.Rubis)
+
+		var choix int
+		fmt.Print("Votre choix : ")
+		fmt.Scan(&choix)
+
+		if choix == 0 {
+			fmt.Println("Au revoir !")
+			return
+		}
+
+		if choix < 1 || choix > len(shopItems) {
+			fmt.Println("Choix invalide.")
+			continue
+		}
+
+		selectedItem := shopItems[choix-1]
+
+		if selectedItem.PriceRubis > personnage.Rubis {
+			fmt.Println("Vous n'avez pas assez de Rubis pour cet item !")
+			continue
+		}
+		if selectedItem.PriceDiam > personnage.CountItem("Diamant") {
+			fmt.Println("Vous n'avez pas assez de Diamants pour cet item !")
+			continue
+		}
+
+		personnage.Rubis -= selectedItem.PriceRubis
+		for i := 0; i < selectedItem.PriceDiam; i++ {
+			personnage.RemoveItem("Diamant")
+		}
+
+		personnage.AddInventory(selectedItem.Name)
+
+		if selectedItem.EffectPV > 0 {
+			personnage.PV += selectedItem.EffectPV
+			if personnage.PV > personnage.Max_PV {
+				personnage.PV = personnage.Max_PV
+			}
+			fmt.Printf("%s vous rend %d PV ! PV actuel : %d/%d\n", selectedItem.Name, selectedItem.EffectPV, personnage.PV, personnage.Max_PV)
+		}
+
+		fmt.Println(selectedItem.Name, "a été ajouté à votre inventaire !")
+
+		shopItems = append(shopItems[:choix-1], shopItems[choix:]...)
+	}
+
+	fmt.Println("Le marchand n'a plus d'items à vendre. Retour au menu principal.")
+}
+
 
 // Tâche 9 : Utilisation d'une potion de poison (renommée miasme)
 func (personnage *Character) PoisonPot() {
@@ -148,7 +281,6 @@ func (personnage *Character) RemoveItemAt(index int) {
 	personnage.Inventory[len(personnage.Inventory)-1] = ""
 }
 
-
 // Fonction menu
 func menu(c1 *Character){
 	for {
@@ -175,13 +307,13 @@ func menu(c1 *Character){
 		case "P":
 			displayInfo(*c1)
 		case "I":
-			accessInventory(c1.Inventory)
+			c1.accessInventory()
 		case "S":
 			c1.TakePot()
 		case "U":
 			c1.PoisonPot()
 		case "M":
-			color.HiBlack("Magasin : Pas encore codé")
+    		Merchant(c1)
 		case "F":
 			color.HiBlack("Forgeron : Pas encore codé")
 		case "Exit":
