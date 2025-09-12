@@ -256,13 +256,6 @@ func (personnage *Character) PoisonPot() {
 
 				// Afficher l’état
 				fmt.Printf("Après %d seconde(s) : %d / %d PV\n", j, personnage.PV, personnage.Max_PV)
-
-				// Si le personnage meurt, on arrête
-				if personnage.PV == 0 {
-					fmt.Println(personnage.Name, "a succombé à ses blessures !")
-					personnage.RemoveItemAt(i)
-					return
-				}
 			}
 
 			fmt.Println("Le miasme n’a plus d’effet")
@@ -322,6 +315,17 @@ func menu(c1 *Character){
 		default:
 			color.Red("Choix non reconnu")
         }
+		c1.IsDead()
+	}
+}
+
+func (personnage *Character) IsDead() {
+	if personnage.PV <= 0 {
+		color.HiRed("%s a succombé à ses blessures ! ⚰️", personnage.Name)
+		// Résurrection avec 50% des PV
+		personnage.PV = 100
+		color.Green("%s est ressuscité avec %d/%d PV ! ✨",
+			personnage.Name, personnage.PV, personnage.Max_PV)
 	}
 }
 
@@ -335,6 +339,10 @@ func main() {
 	inventory[1] = "Fairy"
 	inventory[2] = "Fairy"
 	inventory[3] = "Miasme"
+	inventory[4] = "Miasme"
+	inventory[5] = "Miasme"
+	inventory[6] = "Miasme"
+	inventory[7] = "Miasme"
 
 	c1 := initCharacter("Link", "Hylien", 1, 500, 100, inventory)
 
@@ -347,5 +355,5 @@ func main() {
 
 	// Étape 2 : lancement du menu
 	menu(&c1)
+	c1.IsDead()
 }
-
