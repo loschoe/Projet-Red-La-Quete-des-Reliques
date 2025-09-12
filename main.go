@@ -348,7 +348,7 @@ func main() {
 		}
 	}
 
-	// Étape 2 : lancements 
+	// Étape 2 : lancements
 	menu(&c1)
 	c1.IsDead()
 }
