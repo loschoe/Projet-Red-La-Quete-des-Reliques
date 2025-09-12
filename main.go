@@ -152,18 +152,24 @@ func (personnage *Character) RemoveItemAt(index int) {
 // Fonction menu
 func menu(c1 *Character){
 	for {
-		color.Cyan("\nMENU")
-		color.Blue("- Informations personnage [P]")
-		color.Blue("- Accéder à l’inventaire [I]")
-		color.Green("- Utiliser une potion [S]")
-        color.HiGreen("- Utiliser une potion de poison [U]")
-		color.HiBlack("- Magasin [M]")
-        color.HiBlack("- Forgeron [F]")
-		color.Red("\n- Quitter le jeu [Exit]")
+	fmt.Println("+-------------------------------+")
+	color.Cyan("|             MENU              |")
+	fmt.Println("+-------------------------------+")
+	color.Blue("|👕 Informations personnage [P] |")
+	color.Blue("|🎒 Accéder à l’inventaire [I]  |")
+	color.Green("|🌟 Potion de soin [S]          |")
+	color.HiGreen("|☠️  Potion de poison [U]        |")
+	color.HiBlack("|💶 Magasin [M]                 |")
+	color.HiBlack("|⚔️  Forgeron [F]                |")
+	fmt.Println("|                               |")
+	color.Red("|❌ Quitter le jeu [Exit]       |")
+	fmt.Println("+-------------------------------+")
 
-		var choice string
-		color.Yellow("\nVers quel menu souhaitez-vous aller ? ")
-		fmt.Scanln(&choice)
+	// Remplacement du second "MENU" par "Votre choix ?"
+	color.Yellow("\nVotre choix ? ")
+	var choice string
+	fmt.Scanln(&choice)
+
 
 				switch choice {
 		case "P":
