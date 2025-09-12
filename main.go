@@ -319,6 +319,7 @@ func menu(c1 *Character){
 	}
 }
 
+// Tâche 8 : Vérification de la mort du personnage
 func (personnage *Character) IsDead() {
 	if personnage.PV <= 0 {
 		color.HiRed("%s a succombé à ses blessures ! ⚰️", personnage.Name)
@@ -338,12 +339,7 @@ func main() {
 	inventory[0] = "Fairy"
 	inventory[1] = "Fairy"
 	inventory[2] = "Fairy"
-	inventory[3] = "Miasme"
-	inventory[4] = "Miasme"
-	inventory[5] = "Miasme"
-	inventory[6] = "Miasme"
-	inventory[7] = "Miasme"
-
+	
 	c1 := initCharacter("Link", "Hylien", 1, 500, 100, inventory)
 
 	// Remplacer les cases vides par "..."
