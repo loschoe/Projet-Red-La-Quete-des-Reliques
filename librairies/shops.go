@@ -54,7 +54,7 @@ func Merchant(personnage *Character) {
 	shopItems := []ShopItem{
 		{"5X Arrow", 10, 0, 0},
 		{"5X Arrow", 10, 0, 0},
-		{"Master Sword", 0, 3, 0},
+		{"Master Sword", 0, 2, 0},
 		{"PoisonPot", 25, 0, 0},
 		{"Divine Venison", 50, 0, 25},
 	}

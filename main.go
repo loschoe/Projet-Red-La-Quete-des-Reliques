@@ -1,8 +1,8 @@
 package main
 
 import (
-	"fmt"
 	"PROJET_RED/librairies"
+	"fmt"
 	"github.com/fatih/color"
 )
 
@@ -18,7 +18,8 @@ func Menu(c1 *librairies.Character) {
 		color.HiGreen("|☠️  Potion de poison [U]        |")
 		color.HiBlack("|💶 Magasin [M]                 |")
 		color.HiBlack("|⚔️  Forgeron [F]                |")
-		fmt.Println("|                               |")
+		color.HiRed("|🛡️  Combat [C]                  |")
+		color.HiRed("|                               |")
 		color.Red("|❌ Quitter le jeu [Exit]       |")
 		fmt.Println("+-------------------------------+")
 
@@ -39,6 +40,8 @@ func Menu(c1 *librairies.Character) {
 			librairies.Merchant(c1)
 		case "F":
 			librairies.Forge(c1)
+		case "C":
+			librairies.TrainingFight(c1)
 		case "Exit":
 			color.Red("Fermeture du jeu...")
 			return

@@ -14,6 +14,7 @@ type Character struct {
 	Inventory          [10]string
 	HasReceivedDiamond bool
 	Rubis              int
+	Attack             int
 }
 
 func InitCharacter(name string, classe string, level int, max_pv int, pv int, inventory [10]string) Character {
@@ -27,15 +28,15 @@ func InitCharacter(name string, classe string, level int, max_pv int, pv int, in
 		Max_PV:    max_pv,
 		PV:        pv,
 		Inventory: inventory,
-		Rubis:     10, // commence avec 10 rubis
+		Rubis:     15, // Commence avec 15 rubis
+		Attack:    6, // Attaque de 6
 	}
 }
 
 func DisplayInfo(c *Character) {
-	fmt.Printf("\nName : %s\nClasse : %s\nLevel : %d\nPV : %d/%d\nInventory : %v\n",
-		c.Name, c.Classe, c.Level, c.PV, c.Max_PV, c.Inventory)
+    fmt.Printf("\nName : %s\nClasse : %s\nLevel : %d\nPV : %d/%d\nInventory : %v\nRubis : %d\n",
+        c.Name, c.Classe, c.Level, c.PV, c.Max_PV, c.Inventory, c.Rubis)
 }
-
 
 func (c *Character) AccessInventory() {
 	fmt.Println("\nInventaire du personnage :")
@@ -112,4 +113,38 @@ func (personnage *Character) IsDead() {
         personnage.PV = personnage.Max_PV / 2
         color.Green("%s est ressuscité avec %d/%d PV ! ✨", personnage.Name, personnage.PV, personnage.Max_PV)
     }
+}
+
+// Utiliser le premier objet de l'inventaire
+func (c *Character) UseItem() {
+	switch c.Inventory[0] {
+	case "Fairy":
+		c.TakePot() // vient de potions.go
+		c.Inventory[0] = "" // supprime l'objet
+	case "Miasme":
+		c.PoisonPot() // vient de potions.go
+		c.Inventory[0] = ""
+	default:
+		fmt.Println("Aucun objet utilisable sélectionné !")
+	}
+}
+
+// Utiliser un objet à un index choisi
+func (c *Character) UseItemAt(index int) {
+	if index < 0 || index >= len(c.Inventory) || c.Inventory[index] == "" || c.Inventory[index] == "..." {
+		fmt.Println("Case invalide ou vide !")
+		return
+	}
+
+	item := c.Inventory[index]
+	switch item {
+	case "Fairy":
+		c.TakePot()
+		c.Inventory[index] = ""
+	case "Miasme":
+		c.PoisonPot()
+		c.Inventory[index] = ""
+	default:
+		fmt.Println("Cet objet ne peut pas être utilisé !")
+	}
 }
