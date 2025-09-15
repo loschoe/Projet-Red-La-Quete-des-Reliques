@@ -177,7 +177,7 @@ func printShop(shopItems []ShopItem) {
 	}
 
 	fmt.Println("+-----------------+-------------+")
-	fmt.Printf("| %-15s | %-11s |\n", "Quitter", "Press 6")
+	fmt.Printf("| %-15s | %-11s |\n", "Quitter", "Press 0")
 	fmt.Println("+-----------------+-------------+")
 }
 
@@ -215,7 +215,7 @@ func Merchant(personnage *Character) {
 		fmt.Print("Votre choix : ")
 		fmt.Scanln(&choix)
 
-		if choix == 6 {
+		if choix == 0 {
 			fmt.Println("Au revoir !")
 			return
 		}
@@ -270,7 +270,7 @@ func printForge(items []ForgeItem) {
 		}
 		fmt.Println(")")
 	}
-	fmt.Println("6) Quitter")
+	fmt.Println("0) Quitter")
 }
 
 func Forge(personnage *Character) {
@@ -300,7 +300,7 @@ func Forge(personnage *Character) {
 		fmt.Print("Votre choix : ")
 		fmt.Scanln(&choix)
 
-		if choix == 6 {
+		if choix == 0 {
 			fmt.Println("Au revoir !")
 			return
 		}
