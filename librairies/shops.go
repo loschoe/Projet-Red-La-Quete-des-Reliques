@@ -148,7 +148,7 @@ func Forge(personnage *Character) {
 	forgeItems := []ForgeItem{
 		{"Casque de garde", map[string]int{"Lingot": 1}, 0},
 		{"Tunique royale", map[string]int{"Lingot": 1, "Tissu royal": 1}, 0},
-		{"Bottes", map[string]int{"4x Cuir": 1}, 0},
+		{"Bottes", map[string]int{"Cuir": 1}, 0},
 	}
 
 	for {
