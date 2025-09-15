@@ -57,6 +57,9 @@ func Merchant(personnage *Character) {
 		{"Master Sword", 0, 2, 0},
 		{"Miasme", 25, 0, 0},
 		{"Divine Venison", 50, 0, 25},
+		{"Lingot", 3, 0, 0},
+		{"Lingot", 3, 0, 0},
+		{"Cuir", 5, 0, 0},
 	}
 
 	if !personnage.HasReceivedDiamond {
