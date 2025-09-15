@@ -56,15 +56,13 @@ func CharTurn(player *Character, monster *Monster, turn int) {
 
 	color.Red("%s\n", shopArt)
 
-	// Affichage du tour juste après l'ASCII
-	color.Blue("\n===== Tour %d =====\n", turn)
+	color.Blue("\n====== Tour %d ======\n", turn)
 
 	var choice int
 	color.Green("------ Tour du joueur ------\n")
 	color.Green("\nAdversaire : %s | PV : %d/%d\n", monster.Name, monster.PV, monster.Max_PV)
 	color.Red("1. Attaquer\n")
 	color.Yellow("2. Inventaire / Utiliser objet\n")
-	color.Cyan("3. Fuir (retour menu)\n")
 	fmt.Print("\nVotre choix : ")
 	fmt.Scan(&choice)
 
@@ -84,9 +82,6 @@ func CharTurn(player *Character, monster *Monster, turn int) {
 		var itemChoice int
 		fmt.Scan(&itemChoice)
 		player.UseItemAt(itemChoice - 1)
-	case 3:
-		color.Red("\nVous prenez la fuite... retour au menu principal.\n")
-		player.PV = 0 // Force la sortie du combat
 	default:
 		fmt.Printf("\nChoix invalide, vous perdez votre tour !\n\n")
 	}
