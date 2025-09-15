@@ -15,7 +15,7 @@ func Menu(c1 *librairies.Character) {
 		color.Blue("|👕 Infos personnage [P]        |")
 		color.Blue("|🎒 Inventaire [I]              |")
 		color.Green("|🌟 Potion de soin [S]          |")
-		color.HiGreen("|☠️  Potion de poison [U]        |")
+		color.HiGreen("|☠️  Boire un poison ([U]        |")
 		color.HiBlack("|💶 Magasin [M]                 |")
 		color.HiBlack("|⚔️  Forgeron [F]                |")
 		color.HiRed("|🛡️  Combat [C]                  |")
@@ -35,7 +35,7 @@ func Menu(c1 *librairies.Character) {
 		case "S":
 			c1.TakePot()
 		case "U":
-			c1.PoisonPot()
+			c1.Poisonbottle()
 		case "M":
 			librairies.Merchant(c1)
 		case "F":

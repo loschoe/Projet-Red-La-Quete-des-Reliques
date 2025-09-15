@@ -1,10 +1,11 @@
-package librairies 
+package librairies
 
-import(
+import (
 	"fmt"
 	"github.com/fatih/color"
 )
 
+// Character représente un joueur
 type Character struct {
 	Name               string
 	Classe             string
@@ -17,6 +18,7 @@ type Character struct {
 	Attack             int
 }
 
+// Initialisation d'un personnage
 func InitCharacter(name string, classe string, level int, max_pv int, pv int, inventory [10]string) Character {
 	if pv > max_pv {
 		pv = max_pv
@@ -28,16 +30,18 @@ func InitCharacter(name string, classe string, level int, max_pv int, pv int, in
 		Max_PV:    max_pv,
 		PV:        pv,
 		Inventory: inventory,
-		Rubis:     15, // Commence avec 15 rubis
-		Attack:    6, // Attaque de 6
+		Rubis:     15,
+		Attack:    6,
 	}
 }
 
+// Affiche les infos du personnage
 func DisplayInfo(c *Character) {
-    fmt.Printf("\nName : %s\nClasse : %s\nLevel : %d\nPV : %d/%d\nInventory : %v\nRubis : %d\n",
-        c.Name, c.Classe, c.Level, c.PV, c.Max_PV, c.Inventory, c.Rubis)
+	fmt.Printf("\nName : %s\nClasse : %s\nLevel : %d\nPV : %d/%d\nInventory : %v\nRubis : %d\n",
+		c.Name, c.Classe, c.Level, c.PV, c.Max_PV, c.Inventory, c.Rubis)
 }
 
+// Accéder à l'inventaire
 func (c *Character) AccessInventory() {
 	fmt.Println("\nInventaire du personnage :")
 	vide := true
@@ -56,6 +60,7 @@ func (c *Character) AccessInventory() {
 	fmt.Println()
 }
 
+// Ajouter un objet
 func (c *Character) AddInventory(item string) {
 	if c.IsInventoryFull() {
 		fmt.Println("Inventaire plein ! Impossible d'ajouter", item)
@@ -70,6 +75,7 @@ func (c *Character) AddInventory(item string) {
 	}
 }
 
+// Retirer un objet par nom
 func (c *Character) RemoveItem(item string) {
 	for idx, i := range c.Inventory {
 		if i == item {
@@ -80,6 +86,15 @@ func (c *Character) RemoveItem(item string) {
 	}
 }
 
+// Retirer un objet à un index
+func (c *Character) RemoveItemAt(index int) {
+	for j := index; j < len(c.Inventory)-1; j++ {
+		c.Inventory[j] = c.Inventory[j+1]
+	}
+	c.Inventory[len(c.Inventory)-1] = ""
+}
+
+// Compter un objet
 func (c *Character) CountItem(item string) int {
 	count := 0
 	for _, i := range c.Inventory {
@@ -90,13 +105,7 @@ func (c *Character) CountItem(item string) int {
 	return count
 }
 
-func (c *Character) RemoveItemAt(index int) {
-	for j := index; j < len(c.Inventory)-1; j++ {
-		c.Inventory[j] = c.Inventory[j+1]
-	}
-	c.Inventory[len(c.Inventory)-1] = ""
-}
-
+// Vérifier si l'inventaire est plein
 func (c *Character) IsInventoryFull() bool {
 	count := 0
 	for _, item := range c.Inventory {
@@ -107,43 +116,46 @@ func (c *Character) IsInventoryFull() bool {
 	return count >= 10
 }
 
-func (personnage *Character) IsDead() {
-    if personnage.PV <= 0 {
-        color.HiRed("%s est mort ! ⚰️", personnage.Name)
-        personnage.PV = personnage.Max_PV / 2
-        color.Green("%s est ressuscité avec %d/%d PV ! ✨", personnage.Name, personnage.PV, personnage.Max_PV)
-    }
-}
-
-// Utiliser le premier objet de l'inventaire
-func (c *Character) UseItem() {
-	switch c.Inventory[0] {
-	case "Fairy":
-		c.TakePot() // vient de potions.go
-		c.Inventory[0] = "" // supprime l'objet
-	case "Miasme":
-		c.PoisonPot() // vient de potions.go
-		c.Inventory[0] = ""
-	default:
-		fmt.Println("Aucun objet utilisable sélectionné !")
+// Vérifier si le personnage est mort
+func (c *Character) IsDead() {
+	if c.PV <= 0 {
+		color.HiRed("%s est mort ! ⚰️\n", c.Name)
+		c.PV = c.Max_PV / 2
+		color.Green("%s est ressuscité avec %d/%d PV ! ✨\n", c.Name, c.PV, c.Max_PV)
 	}
 }
 
 // Utiliser un objet à un index choisi
-func (c *Character) UseItemAt(index int) {
+// On passe en paramètre le monstre si besoin (pour Miasme)
+func (c *Character) UseItemAt(index int, monster *Monster) {
 	if index < 0 || index >= len(c.Inventory) || c.Inventory[index] == "" || c.Inventory[index] == "..." {
 		fmt.Println("Case invalide ou vide !")
 		return
 	}
 
 	item := c.Inventory[index]
+
 	switch item {
 	case "Fairy":
 		c.TakePot()
 		c.Inventory[index] = ""
+
 	case "Miasme":
-		c.PoisonPot()
-		c.Inventory[index] = ""
+		var choix int
+		fmt.Println("Que voulez-vous faire avec le poison ? (1 = boire, 2 = lancer sur le monstre) :")
+		fmt.Scan(&choix)
+
+		if choix == 1 {
+			c.Poisonbottle() // dégâts sur le joueur
+		} else if choix == 2 {
+			if monster != nil {
+				c.PoisonPot(monster) // dégâts sur le monstre
+			} else {
+				fmt.Println("Aucun monstre cible pour Miasme !")
+			}
+		} else {
+			fmt.Println("Choix invalide, aucune action effectuée.")
+		}
 	default:
 		fmt.Println("Cet objet ne peut pas être utilisé !")
 	}
