@@ -103,7 +103,7 @@ func (m *Monster) KrrrooçePattern(player *Character, turn int) {
 
 // ------------------- Tour du joueur -------------------
 
-func CharTurn(player *Character, monster *Monster, turn int) {
+func CombatTurn(player *Character, monster *Monster, turn int) {
 	shopArt := `
    _____                _           _   
   / ____|              | |         | |  
@@ -113,21 +113,24 @@ func CharTurn(player *Character, monster *Monster, turn int) {
   \_____\___/|_| |_| |_|_.__/ \__,_|\__|
 `
 	color.Red("%s\n", shopArt)
-	color.Blue("\n============== Tour %d==============\n", turn)
+	color.Blue("\n============== Tour %d ==============\n", turn)
 	time.Sleep(1 * time.Second)
 	color.Green("Adversaire : %s | PV : %d/%d\n", monster.Name, monster.PV, monster.Max_PV)
 	color.Green("%s | PV : %d/%d\n\n", player.Name, player.PV, player.Max_PV)
 
-	color.Red("1. Attaquer")
-	color.Yellow("2. Inventaire / Utiliser objet")
-	color.Cyan("3. Choisir le boss")
-	color.HiRed("4. Fuir (retour menu)")
+	color.Red("1. Attaque Coup de poing")
+	color.Red("2. Epée tranchante")
+	color.Red("3. Pluie de flèches")
+	color.Yellow("4. Inventaire / Utiliser objet")
+	color.Cyan("5. Choisir le boss")
+	color.HiRed("6. Fuir (retour menu)")
 	fmt.Print("\nVotre choix : ")
 
 	var choice int
 	fmt.Scanln(&choice)
 
 	switch choice {
+
 	case 1:
 		damage := player.Attack
 		monster.PV -= damage
@@ -139,6 +142,16 @@ func CharTurn(player *Character, monster *Monster, turn int) {
 		color.Green("PV restants de %s : %d/%d\n\n", monster.Name, monster.PV, monster.Max_PV)
 
 	case 2:
+		fmt.Printf("\n%s utilise sa Master Sword !\n", player.Name)
+		player.UseMasterSword(monster)
+		time.Sleep(1 * time.Second)
+
+	case 3:
+		fmt.Printf("\n%s utilise son Arc !\n", player.Name)
+		player.UseBow(monster)
+		time.Sleep(1 * time.Second)
+
+	case 4:
 		player.AccessInventory()
 		fmt.Print("Choisissez un objet à utiliser : ")
 		var itemChoice int
@@ -167,16 +180,20 @@ func CharTurn(player *Character, monster *Monster, turn int) {
 			fmt.Println("Cet objet ne peut pas être utilisé !")
 		}
 
-	case 3:
+	case 5:
 		color.Yellow("Choix du boss...")
-		// Ici tu peux lancer une fonction qui permet de choisir le boss à combattre
 
-	case 4:
+	case 6:
 		fmt.Println("Vous prenez la fuite... retour au menu principal.")
 		player.PV = 0
+
 	default:
 		fmt.Println("Choix invalide, vous perdez votre tour !")
 	}
+}
+
+func CharTurn(player *Character, monster *Monster, turn int) {
+	CombatTurn(player, monster, turn)
 }
 
 // ------------------- Menu Combat -------------------
