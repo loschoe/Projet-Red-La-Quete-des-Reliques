@@ -61,7 +61,7 @@ func main() {
 	// Initialiser l'inventaire de base
 	inventory := [10]string{
 		"Fairy",
-		"...",
+		"Miasme",
 		"...",
 		"...",
 		"...",

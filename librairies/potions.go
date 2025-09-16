@@ -13,7 +13,7 @@ func (personnage *Character) TakePot() {
 			if personnage.PV > personnage.Max_PV {
 				personnage.PV = personnage.Max_PV
 			}
-			color.Yellow(personnage.Name, "utilise une Fée ! PV =", personnage.PV, "/", personnage.Max_PV)
+			println(personnage.Name, "utilise une Fée ! PV =", personnage.PV, "/", personnage.Max_PV)
 			personnage.Inventory[i] = "..."
 			return
 		}
@@ -25,7 +25,7 @@ func (personnage *Character) TakePot() {
 func (personnage *Character) Poisonbottle() {
 	for i, item := range personnage.Inventory {
 		if item == "Miasme" {
-			color.HiBlack(personnage.Name, "utilise un miasme ! \n")
+			println(personnage.Name, "utilise un miasme ! \n")
 			for j := 1; j <= 3; j++ {
 				time.Sleep(1 * time.Second)
 				personnage.PV -= 15
@@ -45,7 +45,7 @@ func (personnage *Character) Poisonbottle() {
 func (personnage *Character) PoisonPot(monster *Monster) {
 	for i, item := range personnage.Inventory {
 		if item == "Miasme" {
-			color.HiBlack(personnage.Name, "utilise un miasme ! \n")
+			println(personnage.Name, "utilise un miasme ! \n")
 			for j := 1; j <= 3; j++ {
 				time.Sleep(1 * time.Second)
 				monster.PV -= 15
