@@ -49,6 +49,10 @@ func Menu(c1 *librairies.Character) {
 			color.Red("Choix non reconnu")
 		}
 		c1.IsDead()
+
+		if c1.GameOver {
+			return
+		}
 	}
 }
 
@@ -79,9 +83,10 @@ func main() {
 	// Lancer le menu principal
 	Menu(c1)
 
+	// Si GameOver est true, lancer EndGame
 	if c1.GameOver {
-    color.Red("Merci d'avoir joué ! Fermeture du jeu...\n")
-	librairies.EndGame()
-    return
+		color.Red("Merci d'avoir joué ! Fermeture du jeu...\n")
+		librairies.EndGame()
+		return
 	}
 }

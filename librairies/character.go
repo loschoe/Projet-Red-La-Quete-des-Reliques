@@ -42,15 +42,15 @@ func InitCharacter(name string, classe string, level int, max_pv int, pv int, in
 		InventoryCapacity: 10, // départ avec un inventaire de 10 slots
 		InventoryUpgrades: 0,
 		Rubis:     900,
-		Attack:    2000,
+		Attack:    6,
 		GameOver : false,
 	}
 }
 
 // Affiche les infos du personnage
 func DisplayInfo(c *Character) {
-	fmt.Printf("\nName : %s\nClasse : %s\nLevel : %d\nPV : %d/%d\nInventory : %v\nRubis : %d\n",
-		c.Name, c.Classe, c.Level, c.PV, c.Max_PV, c.Inventory, c.Rubis)
+	fmt.Printf("\nName : %s\nClasse : %s\nLevel : %d\nPV : %d/%d \nAttack : %v \nInventory : %v\nRubis : %d\n",
+		c.Name, c.Classe, c.Level, c.PV, c.Max_PV, c.Attack, c.Inventory, c.Rubis)
 }
 
 // Accéder à l'inventaire

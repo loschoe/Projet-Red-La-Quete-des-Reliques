@@ -245,6 +245,9 @@ func TrainingFight(player *Character) {
 		color.Green("%s reçoit 25 rubis !\n", player.Name)
 		player.Level += 1
 		color.Green("%s passe au niveau supérieur !\n", player.Name)
+		//  Augmentation de l'attaque si Bokoblin vaincu
+		player.Attack += 4
+		color.HiMagenta("💥 Votre attaque augmente de 4 ! Nouvelle attaque : %d\n", player.Attack)
 		color.Yellow("\nRetour au menu principal...\n")
 	}
 }
@@ -270,6 +273,9 @@ func StartFight(player *Character, monster Monster, pattern func(*Monster, *Char
 			player.Rubis += 30
 			player.Level += 2
 			color.Green("%s reçoit 30 rubis et passe de 2 niveaux !\n", player.Name)
+			// Si Moblin est mort, augmenter l'attaque de 5
+			player.Attack += 5
+			color.HiMagenta("💥 Votre attaque augmente de 5 ! Nouvelle attaque : %d\n", player.Attack)
 		case "Lynel":
 			drops := []string{"Diamant", "Tissu Royal"}
 			for _, item := range drops {
