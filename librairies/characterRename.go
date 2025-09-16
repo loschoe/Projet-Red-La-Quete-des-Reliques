@@ -1,0 +1,75 @@
+package librairies
+
+import (
+	"fmt"
+)
+
+// Vérifie si une chaîne contient uniquement des lettres
+func IsAlpha(s string) bool {
+	for i := 0; i < len(s); i++ {
+		if !((s[i] >= 'A' && s[i] <= 'Z') || (s[i] >= 'a' && s[i] <= 'z')) {
+			return false
+		}
+	}
+	return true
+}
+
+// Met la première lettre en majuscule et le reste en minuscule
+func FormatName(s string) string {
+	if len(s) == 0 {
+		return s
+	}
+	b := []byte(s)
+	if b[0] >= 'a' && b[0] <= 'z' {
+		b[0] -= 32
+	}
+	for i := 1; i < len(b); i++ {
+		if b[i] >= 'A' && b[i] <= 'Z' {
+			b[i] += 32
+		}
+	}
+	return string(b)
+}
+
+// CharacterCreation propose un pseudo personnalisé
+// Retourne "" si le joueur refuse de choisir un pseudo
+func CharacterCreation() string {
+	var input, confirm string
+	for {
+		fmt.Print("Voulez-vous un pseudo personnalisé ? (y/n) : ")
+		fmt.Scanln(&confirm)
+
+		if confirm == "y" || confirm == "oui" {
+			// Saisie du pseudo
+			for {
+				fmt.Print("Entrez le nom de votre personnage : ")
+				fmt.Scanln(&input)
+
+				if !IsAlpha(input) {
+					fmt.Println("Erreur : le nom ne doit contenir que des lettres.")
+					continue
+				}
+
+				name := FormatName(input)
+				fmt.Printf("Nom proposé : %s\n", name)
+
+				fmt.Print("Voulez-vous garder ce nom ? (y/n) : ")
+				fmt.Scanln(&confirm)
+
+				if confirm == "y" || confirm == "oui" {
+					return name
+				} else if confirm == "n" || confirm == "non" {
+					fmt.Println("Recommencez la saisie du nom.")
+					continue
+				} else {
+					fmt.Println("Réponse invalide, veuillez répondre par 'y' ou 'n'.")
+				}
+			}
+		} else if confirm == "n" || confirm == "non" {
+			// Le joueur ne veut pas de pseudo personnalisé
+			return ""
+		} else {
+			fmt.Println("Réponse invalide, veuillez répondre par 'y' ou 'n'.")
+		}
+	}
+}

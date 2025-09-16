@@ -73,18 +73,44 @@ func main() {
 		"...",
 		"...",
 		"...",
-		"...",	
+		"...",
 	}
 
-	// Créer le personnage
-	c := librairies.InitCharacter("Link", "Hylien", 1, 500, 100, inventory)
-	c1 := &c
+	var player librairies.Character
+
+	// Proposer un pseudo personnalisé
+	name := librairies.CharacterCreation()
+
+	if name != "" { // Si le joueur a choisi un pseudo
+		player = librairies.InitCharacter(
+			name,
+			"Hylien",
+			1,
+			100,
+			100,
+			inventory,
+		)
+	} else { // Sinon, personnage de base
+		player = librairies.InitCharacter(
+			"Link",
+			"Hylien",
+			1,
+			500,
+			100,
+			inventory,
+		)
+	}
+
+	playerPtr := &player
+
+	fmt.Printf("Bienvenue, %s ! 👋\n", player.Name)
+	librairies.DisplayInfo(playerPtr)
 
 	// Lancer le menu principal
-	Menu(c1)
+	Menu(playerPtr)
 
 	// Si GameOver est true, lancer EndGame
-	if c1.GameOver {
+	if playerPtr.GameOver {
 		color.Red("Merci d'avoir joué ! Fermeture du jeu...\n")
 		librairies.EndGame()
 		return

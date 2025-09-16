@@ -13,8 +13,8 @@ type Character struct {
 	Max_PV             int
 	PV                 int
 	Inventory          []string
-	InventoryCapacity  int          // capacité actuelle
-	InventoryUpgrades  int          // nombre d’augmentations
+	InventoryCapacity  int          
+	InventoryUpgrades  int          
 	HasReceivedDiamond bool
 	Rubis              int
 	Attack             int
@@ -39,7 +39,7 @@ func InitCharacter(name string, classe string, level int, max_pv int, pv int, in
 		Max_PV:    max_pv,
 		PV:        pv,
 		Inventory:     baseInventory,
-		InventoryCapacity: 10, // départ avec un inventaire de 10 slots
+		InventoryCapacity: 10,
 		InventoryUpgrades: 0,
 		Rubis:     900,
 		Attack:    6,
