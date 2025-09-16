@@ -12,7 +12,9 @@ type Character struct {
 	Level              int
 	Max_PV             int
 	PV                 int
-	Inventory          [10]string
+	Inventory          []string
+	InventoryCapacity  int          // capacité actuelle
+	InventoryUpgrades  int          // nombre d’augmentations
 	HasReceivedDiamond bool
 	Rubis              int
 	Attack             int
@@ -24,14 +26,22 @@ func InitCharacter(name string, classe string, level int, max_pv int, pv int, in
 	if pv > max_pv {
 		pv = max_pv
 	}
+
+	baseInventory := make([]string, 10) // 10 slots vides au départ
+    for i := 0; i < len(inventory) && i < 10; i++ {
+        baseInventory[i] = inventory[i]
+    }
+
 	return Character{
 		Name:      name,
 		Classe:    classe,
 		Level:     level,
 		Max_PV:    max_pv,
 		PV:        pv,
-		Inventory: inventory,
-		Rubis:     15,
+		Inventory:     baseInventory,
+		InventoryCapacity: 10, // départ avec un inventaire de 10 slots
+		InventoryUpgrades: 0,
+		Rubis:     900,
 		Attack:    2000,
 		GameOver : false,
 	}
@@ -77,6 +87,24 @@ func (c *Character) AddInventory(item string) {
 	}
 }
 
+func (c *Character) UpgradeInventorySlot() {
+	if c.InventoryUpgrades >= 3 {
+		fmt.Println("❌ Vous avez déjà atteint la limite d’augmentations (3).")
+		return
+	}
+
+	c.InventoryCapacity += 5
+	c.InventoryUpgrades++
+
+	// recréer un nouvel inventaire avec plus de slots
+	newInventory := make([]string, c.InventoryCapacity)
+	copy(newInventory, c.Inventory)
+	c.Inventory = newInventory
+
+	fmt.Printf("✅ Votre inventaire a été agrandi ! Nouvelle capacité : %d slots\n", c.InventoryCapacity)
+}
+
+
 // Retirer un objet par nom
 func (c *Character) RemoveItem(item string) {
 	for idx, i := range c.Inventory {
@@ -115,8 +143,9 @@ func (c *Character) IsInventoryFull() bool {
 			count++
 		}
 	}
-	return count >= 10
+	return count >= c.InventoryCapacity
 }
+
 
 // Vérifier si le personnage est mort
 func (c *Character) IsDead() {
