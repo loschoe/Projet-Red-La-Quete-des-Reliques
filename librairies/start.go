@@ -1,8 +1,11 @@
+// Ce fichier contient toutes les fonctions nécéssaires au démarrage et à la cloture esthétique du jeu.
+// Le paquet de la librairie où sont stockées les fonctions 
+
 package librairies
 
 import (
-	"fmt"
-	"github.com/fatih/color"
+	"fmt"						// Prints 
+	"github.com/fatih/color"	// Couleurs dans la console 
 )
 
 // ----------- Menu DEMARRER ---------------------
@@ -41,6 +44,7 @@ ___--	'--~~____|     |+++++__|----~    ~---,
 	fmt.Scanln()
 }
 
+// ----------- Menu END Game --------------------- (On remarquera que le chateau est ouvert !)
 func EndGame() {
 	asciiArtt := `
                            |>>>

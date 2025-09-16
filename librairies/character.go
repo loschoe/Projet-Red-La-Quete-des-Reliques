@@ -1,24 +1,26 @@
+// Ce fichier contient toutes les fonctions nécéssaires au personnage et à son fonctionnement 
+// Le paquet de la librairie où sont stockées les fonctions 
 package librairies
 
 import (
-	"fmt"
-	"github.com/fatih/color"
+	"fmt" 						// Pour les prints 
+	"github.com/fatih/color" 	//Pour afficher en couleurs dans la console 
 )
 
-// Character représente un joueur
+// Structure joueur
 type Character struct {
 	Name               string
 	Classe             string
 	Level              int
 	Max_PV             int
 	PV                 int
-	Inventory          []string
-	InventoryCapacity  int          
-	InventoryUpgrades  int          
-	HasReceivedDiamond bool
-	Rubis              int
-	Attack             int
-	GameOver		   bool
+	Inventory          []string // Stocker les items dans un slice 
+	InventoryCapacity  int      // Modifier la capacité de l'inventaire     
+	InventoryUpgrades  int      // 3 améliorations possibles     
+	HasReceivedDiamond bool     // Cadeau du marchand lors du 1er passage 
+	Rubis              int      // Argent du jeu 
+	Attack             int      // Les points d'attaque du joueur 
+	GameOver		   bool     // Détection de la fin du jeu ou d'une mort 
 }
 
 // Initialisation d'un personnage
@@ -32,7 +34,7 @@ func InitCharacter(name string, classe string, level int, max_pv int, pv int, in
         baseInventory[i] = inventory[i]
     }
 
-	return Character{
+	return Character{				// Les variables de la structure sont reprises avec les valeurs 
 		Name:      name,
 		Classe:    classe,
 		Level:     level,
@@ -72,7 +74,7 @@ func (c *Character) AccessInventory() {
 	fmt.Println()
 }
 
-// Ajouter un objet
+// Ajouter un objet dans l'inventaire 
 func (c *Character) AddInventory(item string) {
 	if c.IsInventoryFull() {
 		fmt.Println("Inventaire plein ! Impossible d'ajouter", item)
@@ -87,6 +89,7 @@ func (c *Character) AddInventory(item string) {
 	}
 }
 
+// Augmente la taille de l'inventaire 3x (+ 5 cases)
 func (c *Character) UpgradeInventorySlot() {
 	if c.InventoryUpgrades >= 3 {
 		fmt.Println("❌ Vous avez déjà atteint la limite d’augmentations (3).")
@@ -96,7 +99,7 @@ func (c *Character) UpgradeInventorySlot() {
 	c.InventoryCapacity += 5
 	c.InventoryUpgrades++
 
-	// recréer un nouvel inventaire avec plus de slots
+	// recréer un nouvel inventaire avec p5 cases en plus 
 	newInventory := make([]string, c.InventoryCapacity)
 	copy(newInventory, c.Inventory)
 	c.Inventory = newInventory
@@ -105,7 +108,7 @@ func (c *Character) UpgradeInventorySlot() {
 }
 
 
-// Retirer un objet par nom
+// Retirer un objet de l'inventaire par grâce au nom de l'item
 func (c *Character) RemoveItem(item string) {
 	for idx, i := range c.Inventory {
 		if i == item {
@@ -156,8 +159,8 @@ func (c *Character) IsDead() {
 	}
 }
 
-// Utiliser un objet à un index choisi
-// On passe en paramètre le monstre si besoin (pour Miasme)
+
+// Utiliser un item en combat 
 func (c *Character) UseItemAt(index int, monster *Monster) {
 	if index < 0 || index >= len(c.Inventory) || c.Inventory[index] == "" || c.Inventory[index] == "..." {
 		fmt.Println("Case invalide ou vide !")
@@ -167,20 +170,20 @@ func (c *Character) UseItemAt(index int, monster *Monster) {
 	item := c.Inventory[index]
 
 	switch item {
-	case "Fairy":
+	case "Fairy":	// Une fée (potion de soin)
 		c.TakePot()
 		c.Inventory[index] = ""
 
-	case "Miasme":
+	case "Miasme": // Un miasme (potion de poison)
 		var choix int
 		fmt.Println("Que voulez-vous faire avec le poison ? (1 = boire, 2 = lancer sur le monstre) :")
 		fmt.Scan(&choix)
 
 		if choix == 1 {
-			c.Poisonbottle() // dégâts sur le joueur
+			c.Poisonbottle() 			// dégâts sur le joueur
 		} else if choix == 2 {
 			if monster != nil {
-				c.PoisonPot(monster) // dégâts sur le monstre
+				c.PoisonPot(monster) 	// dégâts sur le monstre
 			} else {
 				fmt.Println("Aucun monstre cible pour Miasme !")
 			}

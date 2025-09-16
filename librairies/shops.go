@@ -1,38 +1,65 @@
+// Ce fichier contient toutes les fonctions nécessaires au service de vente (magasin + forge) et à leur fonctionnement  
+// Le paquet de la librairie où sont stockées les fonctions 
+
 package librairies
 
 import (
 	"fmt"
 	"github.com/fatih/color"
-	"sort"
 )
 
+// ------------- Structures ----------------
+
+
+// Cette structure définit les tarifs et effets des objets du magasin
 type ShopItem struct {
 	Name       string
 	PriceRubis int
 	PriceDiam  int
-	EffectPV   int
+	EffectPV   int // indicatif (affiché seulement), l’effet n’est pas appliqué dans le shop
 }
 
+// Cette structure concerne les objets de la forge et leurs matériaux
 type ForgeItem struct {
 	Name      string
 	Materials map[string]int
 	EffectPV  int
 }
 
-func printShop(shopItems []ShopItem) {
-	// Copier et trier les items par nom
-	sortedItems := make([]ShopItem, len(shopItems))
-	copy(sortedItems, shopItems)
-	sort.Slice(sortedItems, func(i, j int) bool {
-		return sortedItems[i].Name < sortedItems[j].Name
-	})
+// ------------- Données du magasin ----------------
 
+// Stock global du magasin (persiste durant toute la partie)
+var shopItems = []ShopItem{
+	{"Arrow", 10, 0, 0},
+	{"Arrow", 10, 0, 0},
+	{"Arrow", 10, 0, 0},
+	{"Arrow", 10, 0, 0},
+	{"Bow", 5, 0, 0},
+	{"Cuir", 5, 0, 0},
+	{"Divine Venison", 25, 0, 25},
+	{"Divine Venison", 25, 0, 25},
+	{"Fairy", 50, 0, 55},
+	{"Fairy", 50, 0, 55},
+	{"Lingot", 3, 0, 0},
+	{"Lingot", 3, 0, 0},
+	{"Master Sword", 0, 2, 0},
+	{"Miasme", 25, 0, -45},
+	{"Miasme", 25, 0, -45},
+	{"Upgrade kit", 10, 0, 0},
+	{"Upgrade kit", 10, 0, 0},
+	{"Upgrade kit", 10, 0, 0},
+}
+
+// ------------- Fonctions du magasin ----------------
+
+// Afficher les objets du magasin
+func printShop(items []ShopItem) {
 	fmt.Println("+----+-----------------+-------------+--------+")
 	fmt.Printf("| %-2s | %-15s | %-11s | %-6s |\n", "N°", "Items", "Prix", "PV")
 	fmt.Println("+----+-----------------+-------------+--------+")
 
-	for i, item := range sortedItems {
-		// Détermination du prix
+	for i, item := range items {
+		// Prix affiché
 		price := ""
 		if item.PriceRubis > 0 {
 			price = fmt.Sprintf("%d rubis", item.PriceRubis)
@@ -42,58 +69,33 @@ func printShop(shopItems []ShopItem) {
 			price = "gratuit"
 		}
 
-		// Affichage des PV (positifs ou négatifs)
+		// PV affichés (info uniquement)
 		pv := "-"
 		if item.EffectPV != 0 {
 			pv = fmt.Sprintf("%+d", item.EffectPV)
 		}
 
 		fmt.Printf("| %-2d | %-15s | %-11s | %-6s |\n", i+1, item.Name, price, pv)
-
-		// Bordure après chaque groupe d'items identiques
-		if i == len(sortedItems)-1 || sortedItems[i].Name != sortedItems[i+1].Name {
-			fmt.Println("+----+-----------------+-------------+--------+")
-		}
 	}
 
-	// Ligne pour quitter
+	fmt.Println("+----+-----------------+-------------+--------+")
 	fmt.Printf("| %-2s | %-15s | %-11s | %-6s |\n", "0", "Quitter", "", "")
 	fmt.Println("+----+-----------------+-------------+--------+")
 }
 
-
+// Interaction avec le marchand
 func Merchant(personnage *Character) {
 	shopArt := `
                               _       
   /\/\   __ _  __ _  __ _ ___(_)_ __  
  /    \ / _' |/ _' |/ _' / __| | '_ \ 
 / /\/\ \ (_| | (_| | (_| \__ \ | | | |
-\/    \/\__,_|\__, |\__,_|___/_|_| |_|
+\/    \/\__,_|\__, |\__,_|___/_|_| |_| 
               |___/                   
 `
 	color.Red("%s\n", shopArt)
 
-	shopItems := []ShopItem{
-		{"Arrow", 10, 0, 0},
-		{"Arrow", 10, 0, 0},
-		{"Arrow", 10, 0, 0},
-		{"Arrow", 10, 0, 0},
-		{"Master Sword", 0, 2, 0},
-		{"Bow", 5, 0, 0},
-		{"Miasme", 25, 0, -45},
-		{"Miasme", 25, 0, -45},
-		{"Fairy", 50, 0, 55},
-		{"Fairy", 50, 0, 55},
-		{"Divine Venison", 25, 0, 25},
-		{"Divine Venison", 25, 0, 25},
-		{"Lingot", 3, 0, 0},
-		{"Lingot", 3, 0, 0},
-		{"Cuir", 5, 0, 0},
-		{"Upgrade kit", 10,0,0},
-		{"Upgrade kit", 10,0,0},
-		{"Upgrade kit", 10,0,0},
-	}
-
+	// Cadeau diamant la première fois
 	if !personnage.HasReceivedDiamond {
 		personnage.AddInventory("Diamant")
 		personnage.HasReceivedDiamond = true
@@ -101,8 +103,12 @@ func Merchant(personnage *Character) {
 	}
 
 	for {
-		printShop(shopItems)
+		if len(shopItems) == 0 {
+			fmt.Println("Le magasin est vide.")
+			return
+		}
 
+		printShop(shopItems)
 		fmt.Println("\nRubis disponibles :", personnage.Rubis)
 
 		var choix int
@@ -121,6 +127,7 @@ func Merchant(personnage *Character) {
 
 		selectedItem := shopItems[choix-1]
 
+		// Vérification de l’argent
 		if selectedItem.PriceRubis > personnage.Rubis {
 			fmt.Println("Pas assez de Rubis !")
 			continue
@@ -130,34 +137,27 @@ func Merchant(personnage *Character) {
 			continue
 		}
 
-		if selectedItem.Name == "Upgrade kit" {
-			personnage.Rubis -= selectedItem.PriceRubis
-			personnage.UpgradeInventorySlot() // on appelle la fonction
-			// On supprime l’item du shop pour éviter qu’il soit affiché à l’infini
-			shopItems = append(shopItems[:choix-1], shopItems[choix:]...)
-			continue
-		}
-
+		// Paiement
 		personnage.Rubis -= selectedItem.PriceRubis
 		for i := 0; i < selectedItem.PriceDiam; i++ {
 			personnage.RemoveItem("Diamant")
 		}
 
-		personnage.AddInventory(selectedItem.Name)
-
-		if selectedItem.EffectPV > 0 {
-			personnage.PV += selectedItem.EffectPV
-			if personnage.PV > personnage.Max_PV {
-				personnage.PV = personnage.Max_PV
-			}
-			fmt.Printf("%s vous rend %d PV ! PV actuel : %d/%d\n", selectedItem.Name, selectedItem.EffectPV, personnage.PV, personnage.Max_PV)
+		// Cas spécial upgrade kit
+		if selectedItem.Name == "Upgrade kit" {
+			personnage.UpgradeInventorySlot()
+		} else {
+			// Tous les autres vont dans l’inventaire
+			personnage.AddInventory(selectedItem.Name)
 		}
 
+		// Retirer l’item du shop
 		shopItems = append(shopItems[:choix-1], shopItems[choix:]...)
 	}
 }
 
-// -------- FORGE --------
+// ------------- Forge ----------------
+
 func printForgeMenu(items []ForgeItem) {
 	color.Cyan("+----------------------------------------+")
 	color.Cyan("|               Forgeron                 |")
@@ -175,7 +175,6 @@ func printForgeMenu(items []ForgeItem) {
 			first = false
 		}
 
-		// Affichage à la main selon l'index pour les couleurs
 		switch i {
 		case 0:
 			color.Yellow("| 1) Casque  | " + matList + "                 |")
@@ -203,6 +202,7 @@ func Forge(personnage *Character) {
 `
 	color.HiBlack("%s\n", forgeArt)
 
+	// Les items du forgeron
 	forgeItems := []ForgeItem{
 		{"Casque de garde", map[string]int{"Lingot": 1}, 0},
 		{"Tunique royale", map[string]int{"Lingot": 1, "Tissu royal": 1}, 0},
@@ -210,7 +210,7 @@ func Forge(personnage *Character) {
 	}
 
 	for {
-		printForgeMenu(forgeItems) // remplace printForge(forgeItems)
+		printForgeMenu(forgeItems)
 		fmt.Println("\nInventaire :", personnage.Inventory)
 
 		var choix int
@@ -220,7 +220,7 @@ func Forge(personnage *Character) {
 		if choix == 0 {
 			fmt.Println("Au revoir !")
 			return
-	}
+		}
 
 		if choix < 1 || choix > len(forgeItems) {
 			fmt.Println("Choix invalide.")
@@ -239,15 +239,18 @@ func Forge(personnage *Character) {
 			continue
 		}
 
+		// Retirer matériaux
 		for mat, qty := range selectedItem.Materials {
 			for i := 0; i < qty; i++ {
 				personnage.RemoveItem(mat)
 			}
 		}
 
+		// Ajouter item forgé
 		personnage.AddInventory(selectedItem.Name)
 		fmt.Println(selectedItem.Name, "a été forgé et ajouté à votre inventaire !")
 
+		// Supprimer de la forge
 		forgeItems = append(forgeItems[:choix-1], forgeItems[choix:]...)
 
 		if len(forgeItems) == 0 {

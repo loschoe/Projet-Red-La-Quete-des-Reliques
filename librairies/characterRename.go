@@ -1,10 +1,12 @@
+// Ce fichier contient toutes les fonctions nécéssaires pour rennomer le personnage  
+// Le paquet de la librairie où sont stockées les fonctions 
 package librairies
 
 import (
-	"fmt"
+	"fmt" // Pour les affichages 
 )
 
-// Vérifie si une chaîne contient uniquement des lettres
+// Focntion qui vérifie si la chaîne de caractères contient uniquement des lettres
 func IsAlpha(s string) bool {
 	for i := 0; i < len(s); i++ {
 		if !((s[i] >= 'A' && s[i] <= 'Z') || (s[i] >= 'a' && s[i] <= 'z')) {
@@ -14,7 +16,7 @@ func IsAlpha(s string) bool {
 	return true
 }
 
-// Met la première lettre en majuscule et le reste en minuscule
+// Fonction qui met la première lettre en majuscule et le reste en minuscule
 func FormatName(s string) string {
 	if len(s) == 0 {
 		return s
@@ -31,8 +33,7 @@ func FormatName(s string) string {
 	return string(b)
 }
 
-// CharacterCreation propose un pseudo personnalisé
-// Retourne "" si le joueur refuse de choisir un pseudo
+// Fonction principale de la création d'un pseudo personnalisé 
 func CharacterCreation() string {
 	var input, confirm string
 	for {

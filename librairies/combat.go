@@ -1,9 +1,13 @@
+// Ce fichier contient toutes les fonctions nécéssaires au combat et à son fonctionnement 
+// Le paquet de la librairie où sont stockées les fonctions 
+
+// Les combats se terminent soient par la mort soit par la fuite soit par la victoire du joueur !
 package librairies
 
 import (
-	"fmt"
-	"github.com/fatih/color"
-	"time"
+	"fmt" 						//Certains affichages 
+	"github.com/fatih/color"    //Les couleurs en console 
+	"time"                      //Dans certaines attaques il nous faut une source de temps 
 )
 
 // ------------------- Structures -------------------
@@ -17,6 +21,7 @@ type Monster struct {
 
 // ------------------- Initialisations -------------------
 
+// 1er monstre Bokoblin
 func InitBokoblin(name string, max_PV int, pv int, attack int) Monster {
 	if pv > max_PV {
 		pv = max_PV
@@ -24,6 +29,7 @@ func InitBokoblin(name string, max_PV int, pv int, attack int) Monster {
 	return Monster{Name: name, Max_PV: max_PV, PV: pv, Attack: attack}
 }
 
+// 2e monstre Moblin
 func InitMoblin(name string, max_PV int, pv int, attack int) Monster {
 	if pv > max_PV {
 		pv = max_PV
@@ -31,6 +37,7 @@ func InitMoblin(name string, max_PV int, pv int, attack int) Monster {
 	return Monster{Name: name, Max_PV: max_PV, PV: pv, Attack: attack}
 }
 
+// 3e monstre Lynel 
 func InitLynel(name string, max_PV int, pv int, attack int) Monster {
 	if pv > max_PV {
 		pv = max_PV
@@ -38,6 +45,7 @@ func InitLynel(name string, max_PV int, pv int, attack int) Monster {
 	return Monster{Name: name, Max_PV: max_PV, PV: pv, Attack: attack}
 }
 
+// 4e monstre BOSS FINAL (le nom est bizarre, c'est normal c'est un délire)
 func InitKrrooçe(name string, max_PV int, pv int, attack int) Monster {
 	if pv > max_PV {
 		pv = max_PV
@@ -45,7 +53,7 @@ func InitKrrooçe(name string, max_PV int, pv int, attack int) Monster {
 	return Monster{Name: name, Max_PV: max_PV, PV: pv, Attack: attack}
 }
 
-// ------------------- Patterns -------------------
+// ------------------- Patterns de combats -------------------
 
 func (m *Monster) GoblinPattern(player *Character, turn int) {
 	damage := m.Attack
@@ -118,6 +126,7 @@ func CombatTurn(player *Character, monster *Monster, turn int) {
 	color.Green("Adversaire : %s | PV : %d/%d\n", monster.Name, monster.PV, monster.Max_PV)
 	color.Green("%s | PV : %d/%d\n\n", player.Name, player.PV, player.Max_PV)
 
+	// Les différentes actions possible du joueur 
 	color.Red("1. Attaque Coup de poing")
 	color.Red("2. Epée tranchante")
 	color.Red("3. Pluie de flèches")

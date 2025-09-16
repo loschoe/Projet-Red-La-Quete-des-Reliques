@@ -1,11 +1,14 @@
+// Ce fichier contient toutes les fonctions nécéssaires au fonctionnement des items qui sont présent dans le jeu. 
+// Le paquet de la librairie où sont stockées les fonctions. 
+
 package librairies
 
 import (
-	"github.com/fatih/color"
+	"github.com/fatih/color" // Couleurs 
 )
 
 //=================== EPEE ==================================
-// Nombre d'utilisation de l'épée (globale)
+// Nombre d'utilisation de l'épée
 var MasterSwordUses = 100
 
 func (personnage *Character) UseMasterSword(monster *Monster) {
@@ -38,7 +41,7 @@ func (personnage *Character) UseMasterSword(monster *Monster) {
 }
 
 //=================== ARC ==========================
-var BowUses = 4
+var BowUses = 4 // Compteur d'usage 
 
 func (personnage *Character) UseBow(monster *Monster) {
 	// Vérifie si le personnage a un arc

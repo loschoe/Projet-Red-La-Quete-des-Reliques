@@ -1,11 +1,14 @@
+// Ce fichier contient toutes les fonctions nécéssaires aux potions et à leur fonctionnement 
+// Le paquet de la librairie où sont stockées les fonctions 
+
 package librairies
 
 import (
-	"time"
-	"github.com/fatih/color"
+	"time" 						//le temps d'empoisonnement 
+	"github.com/fatih/color"	//afficher en couleurs 
 )
 
-// -------- POTIONS --------
+// -------- POTION DE SOIN --------
 func (personnage *Character) TakePot() {
 	for i, item := range personnage.Inventory {
 		if item == "Fairy" {
@@ -21,14 +24,14 @@ func (personnage *Character) TakePot() {
 	color.Red("Aucune Fée disponible.")
 }
 
-// Fonction poison buvable 
+// -------- POTION DE POISON (buvable) --------
 func (personnage *Character) Poisonbottle() {
 	for i, item := range personnage.Inventory {
 		if item == "Miasme" {
 			println(personnage.Name, "utilise un miasme ! \n")
 			for j := 1; j <= 3; j++ {
 				time.Sleep(1 * time.Second)
-				personnage.PV -= 15
+				personnage.PV -= 15				// Les dégats sont transmis au joueur 
 				if personnage.PV < 0 {
 					personnage.PV = 0
 				}
@@ -42,13 +45,14 @@ func (personnage *Character) Poisonbottle() {
 	color.Red("Aucun Miasme disponible.\n")
 }
 
+// -------- POTION DE POISON (Lançable) --------
 func (personnage *Character) PoisonPot(monster *Monster) {
 	for i, item := range personnage.Inventory {
 		if item == "Miasme" {
 			println(personnage.Name, "utilise un miasme ! \n")
 			for j := 1; j <= 3; j++ {
 				time.Sleep(1 * time.Second)
-				monster.PV -= 15
+				monster.PV -= 15			// Les dégâts sont transmis au monstre 
 				if monster.PV < 0 {
 					monster.PV = 0
 				}
