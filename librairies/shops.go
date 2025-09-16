@@ -158,21 +158,36 @@ func Merchant(personnage *Character) {
 }
 
 // -------- FORGE --------
-func printForge(items []ForgeItem) {
-	fmt.Println("\n--- Forgeron ---")
+func printForgeMenu(items []ForgeItem) {
+	color.Cyan("+----------------------------------------+")
+	color.Cyan("|               Forgeron                 |")
+	color.Cyan("+----------------------------------------+")
+
 	for i, it := range items {
-		fmt.Printf("%d) %s (nécessite : ", i+1, it.Name)
+		// Construire la liste des matériaux
+		matList := ""
 		first := true
 		for mat, qty := range it.Materials {
 			if !first {
-				fmt.Print(", ")
+				matList += ", "
 			}
-			fmt.Printf("%dx %s", qty, mat)
+			matList += fmt.Sprintf("%dx %s", qty, mat)
 			first = false
 		}
-		fmt.Println(")")
+
+		// Affichage à la main selon l'index pour les couleurs
+		switch i {
+		case 0:
+			color.Yellow("| 1) Casque  | " + matList + "                 |")
+		case 1:
+			color.Blue("| 2) Tunique | " + matList + " |")
+		case 2:
+			color.Green("| 3) Bottes  | " + matList + "                   |")
+		}
 	}
-	fmt.Println("0) Quitter")
+
+	color.Cyan("| 0) Quitter                             |")
+	color.Cyan("+----------------------------------------+")
 }
 
 func Forge(personnage *Character) {
@@ -195,7 +210,7 @@ func Forge(personnage *Character) {
 	}
 
 	for {
-		printForge(forgeItems)
+		printForgeMenu(forgeItems) // remplace printForge(forgeItems)
 		fmt.Println("\nInventaire :", personnage.Inventory)
 
 		var choix int
@@ -205,7 +220,7 @@ func Forge(personnage *Character) {
 		if choix == 0 {
 			fmt.Println("Au revoir !")
 			return
-		}
+	}
 
 		if choix < 1 || choix > len(forgeItems) {
 			fmt.Println("Choix invalide.")
