@@ -16,6 +16,7 @@ type Character struct {
 	HasReceivedDiamond bool
 	Rubis              int
 	Attack             int
+	GameOver		   bool
 }
 
 // Initialisation d'un personnage
@@ -31,7 +32,8 @@ func InitCharacter(name string, classe string, level int, max_pv int, pv int, in
 		PV:        pv,
 		Inventory: inventory,
 		Rubis:     15,
-		Attack:    6,
+		Attack:    2000,
+		GameOver : false,
 	}
 }
 

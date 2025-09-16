@@ -41,7 +41,7 @@ func Menu(c1 *librairies.Character) {
 		case "F":
 			librairies.Forge(c1)
 		case "C":
-			librairies.TrainingFight(c1)
+			librairies.CombatMenu(c1)
 		case "Exit":
 			color.Red("Fermeture du jeu...")
 			return
@@ -78,4 +78,9 @@ func main() {
 
 	// Lancer le menu principal
 	Menu(c1)
+
+	if c1.GameOver {
+    color.Red("Merci d'avoir joué ! Fermeture du jeu...\n")
+    return
+	}
 }
