@@ -89,6 +89,9 @@ func Merchant(personnage *Character) {
 		{"Lingot", 3, 0, 0},
 		{"Lingot", 3, 0, 0},
 		{"Cuir", 5, 0, 0},
+		{"Upgrade kit", 10,0,0},
+		{"Upgrade kit", 10,0,0},
+		{"Upgrade kit", 10,0,0},
 	}
 
 	if !personnage.HasReceivedDiamond {
@@ -124,6 +127,14 @@ func Merchant(personnage *Character) {
 		}
 		if selectedItem.PriceDiam > personnage.CountItem("Diamant") {
 			fmt.Println("Pas assez de Diamants !")
+			continue
+		}
+
+		if selectedItem.Name == "Upgrade kit" {
+			personnage.Rubis -= selectedItem.PriceRubis
+			personnage.UpgradeInventorySlot() // on appelle la fonction
+			// On supprime l’item du shop pour éviter qu’il soit affiché à l’infini
+			shopItems = append(shopItems[:choix-1], shopItems[choix:]...)
 			continue
 		}
 
