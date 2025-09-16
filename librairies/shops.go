@@ -3,6 +3,7 @@ package librairies
 import (
 	"fmt"
 	"github.com/fatih/color"
+	"sort"
 )
 
 type ShopItem struct {
@@ -19,26 +20,47 @@ type ForgeItem struct {
 }
 
 func printShop(shopItems []ShopItem) {
-    fmt.Println("+-----------------+-------------+")
-    fmt.Printf("| %-15s | %-11s |\n", "Items", "Prix")
-    fmt.Println("+-----------------+-------------+")
+	// Copier et trier les items par nom
+	sortedItems := make([]ShopItem, len(shopItems))
+	copy(sortedItems, shopItems)
+	sort.Slice(sortedItems, func(i, j int) bool {
+		return sortedItems[i].Name < sortedItems[j].Name
+	})
 
-    for _, item := range shopItems {
-        price := ""
-        if item.PriceRubis > 0 {
-            price = fmt.Sprintf("%d rubis", item.PriceRubis)
-        } else if item.PriceDiam > 0 {
-            price = fmt.Sprintf("%d diamants", item.PriceDiam)
-        } else {
-            price = "gratuit"
-        }
-        fmt.Printf("| %-15s | %-11s |\n", item.Name, price)
-    }
+	fmt.Println("+----+-----------------+-------------+--------+")
+	fmt.Printf("| %-2s | %-15s | %-11s | %-6s |\n", "N°", "Items", "Prix", "PV")
+	fmt.Println("+----+-----------------+-------------+--------+")
 
-    fmt.Println("+-----------------+-------------+")
-    fmt.Printf("| %-15s | %-11s |\n", "Quitter", "Press 0")
-    fmt.Println("+-----------------+-------------+")
+	for i, item := range sortedItems {
+		// Détermination du prix
+		price := ""
+		if item.PriceRubis > 0 {
+			price = fmt.Sprintf("%d rubis", item.PriceRubis)
+		} else if item.PriceDiam > 0 {
+			price = fmt.Sprintf("%d diamants", item.PriceDiam)
+		} else {
+			price = "gratuit"
+		}
+
+		// Affichage des PV (positifs ou négatifs)
+		pv := "-"
+		if item.EffectPV != 0 {
+			pv = fmt.Sprintf("%+d", item.EffectPV)
+		}
+
+		fmt.Printf("| %-2d | %-15s | %-11s | %-6s |\n", i+1, item.Name, price, pv)
+
+		// Bordure après chaque groupe d'items identiques
+		if i == len(sortedItems)-1 || sortedItems[i].Name != sortedItems[i+1].Name {
+			fmt.Println("+----+-----------------+-------------+--------+")
+		}
+	}
+
+	// Ligne pour quitter
+	fmt.Printf("| %-2s | %-15s | %-11s | %-6s |\n", "0", "Quitter", "", "")
+	fmt.Println("+----+-----------------+-------------+--------+")
 }
+
 
 func Merchant(personnage *Character) {
 	shopArt := `
@@ -52,10 +74,17 @@ func Merchant(personnage *Character) {
 	color.Red("%s\n", shopArt)
 
 	shopItems := []ShopItem{
-		{"5X Arrow", 10, 0, 0},
-		{"5X Arrow", 10, 0, 0},
+		{"Arrow", 10, 0, 0},
+		{"Arrow", 10, 0, 0},
+		{"Arrow", 10, 0, 0},
+		{"Arrow", 10, 0, 0},
 		{"Master Sword", 0, 2, 0},
-		{"Miasme", 25, 0, 0},
+		{"Bow", 5, 0, 0},
+		{"Miasme", 25, 0, -45},
+		{"Miasme", 25, 0, -45},
+		{"Fairy", 5, 0, 55},
+		{"Fairy", 5, 0, 55},
+		{"Divine Venison", 50, 0, 25},
 		{"Divine Venison", 50, 0, 25},
 		{"Lingot", 3, 0, 0},
 		{"Lingot", 3, 0, 0},

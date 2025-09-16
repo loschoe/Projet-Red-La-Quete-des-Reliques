@@ -9,7 +9,7 @@ import (
 func (personnage *Character) TakePot() {
 	for i, item := range personnage.Inventory {
 		if item == "Fairy" {
-			personnage.PV += 50
+			personnage.PV += 55
 			if personnage.PV > personnage.Max_PV {
 				personnage.PV = personnage.Max_PV
 			}
