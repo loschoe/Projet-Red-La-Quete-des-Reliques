@@ -122,8 +122,7 @@ func CombatTurn(player *Character, monster *Monster, turn int) {
 	color.Red("2. Epée tranchante")
 	color.Red("3. Pluie de flèches")
 	color.Yellow("4. Inventaire / Utiliser objet")
-	color.Cyan("5. Choisir le boss")
-	color.HiRed("6. Fuir (retour menu)")
+	color.Cyan("5. Fuir (retour menu)")
 	fmt.Print("\nVotre choix : ")
 
 	var choice int
@@ -181,9 +180,6 @@ func CombatTurn(player *Character, monster *Monster, turn int) {
 		}
 
 	case 5:
-		color.Yellow("Choix du boss...")
-
-	case 6:
 		fmt.Println("Vous prenez la fuite... retour au menu principal.")
 		player.PV = 0
 
@@ -205,7 +201,6 @@ func CombatMenu(player *Character) {
     color.Blue("|💀 Combat Boss (Moblin)          |")
     color.Green("|🐴 Combat Boss (Lynel)           |")
     color.Red("|🍔 Combat Boss (Krrooçe)         |")
-    fmt.Println("|Retour au menu principal         |")
 	color.Cyan("+---------------------------------+")
     fmt.Print("\nVotre choix : ")
 
@@ -289,7 +284,6 @@ func StartFight(player *Character, monster Monster, pattern func(*Monster, *Char
 		case "Krrooçe":
 			// Si c’est Krrrooçe
 			color.HiRed("\n%s a été vaincu ! FIN DU JEU 🎉\n", monster.Name)
-			color.HiRed("Merci d'avoir joué ! Fermeture du jeu...\n")
 			player.GameOver = true
 		default:
 			// Si c’est un autre monstre

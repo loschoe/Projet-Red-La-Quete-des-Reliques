@@ -81,6 +81,7 @@ func main() {
 
 	if c1.GameOver {
     color.Red("Merci d'avoir joué ! Fermeture du jeu...\n")
+	librairies.EndGame()
     return
 	}
 }
