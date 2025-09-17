@@ -24,6 +24,7 @@ type Character struct {
 	GameOver		   bool     // Détection de la fin du jeu ou d'une mort
 	Equipment          [3]string // Stocker les équipements dans un array
 	EquipmentApplied   map[string]bool // Pour savoir si un équipement a été appliqué
+	EquipmentApplied  map[string]bool // Appliquer une seule fois les bonus
 	Skills			   []string // Stocker les compétences dans un slice
 	FireBallUsed       bool     // Pour savoir si le joueur a utilisé Fire Ball dans le combat actuel
 }
@@ -61,6 +62,7 @@ func InitCharacter(name string, classe string, level int, max_pv int, pv int, in
 		Attack:    6,
 		GameOver : false,
 		Equipment: baseEquipment,
+		EquipmentApplied: make(map[string]bool),
 		EquipmentApplied: make(map[string]bool),
 		FireBallUsed: false,
 	}

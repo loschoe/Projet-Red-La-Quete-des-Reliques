@@ -133,6 +133,9 @@ func CombatTurn(player *Character, monster *Monster, turn int) {
     	color.Red("%d. Attaque %s", i+1, skill)
 	}
 
+	// Attaque de base toujours disponible
+	color.Red("1. Attaque Coup de poing")
+
 	// Master Sword → débloque "Épée tranchante"
 	if player.HasItem("Master Sword") {
     	color.Red("2. Épée tranchante")
@@ -183,6 +186,7 @@ func CombatTurn(player *Character, monster *Monster, turn int) {
 	case 4:
     if !player.FireBallUsed {
         player.UseFireBall(monster)
+        player.FireBallUsed = true
         player.FireBallUsed = true 
     } else {
         fmt.Println("Vous avez déjà utilisé Fire Ball ce combat !")
@@ -320,6 +324,7 @@ func StartFight(player *Character, monster Monster, pattern func(*Monster, *Char
 			player.Attack += 5
 			color.HiMagenta("💥 Votre attaque augmente de 5 ! Nouvelle attaque : %d\n", player.Attack)
 		case "Lynel":
+			drops := []string{"Diamant", "Tissu royal"}
 			drops := []string{"Diamant", "Tissu royal"}
 			for _, item := range drops {
 				for i := 0; i < len(player.Inventory); i++ {
