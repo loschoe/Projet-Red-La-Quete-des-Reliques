@@ -23,7 +23,7 @@ type ShopItem struct {
 type ForgeItem struct {
 	Name      string
 	Materials map[string]int
-	Gender    string // "m", "f", "fp"
+	EffectPV  int
 }
 
 // ------------- Données du magasin ----------------
@@ -114,7 +114,7 @@ func Merchant(personnage *Character) {
 
 		var choix int
 		fmt.Print("Votre choix : ")
-		fmt.Scan(&choix)
+		fmt.Scanln(&choix)
 
 		if choix == 0 {
 			fmt.Println("Au revoir !")
@@ -157,13 +157,12 @@ func Merchant(personnage *Character) {
 	}
 }
 
-// ------------- FORGE ----------------
+// ------------- Forge ----------------
 
-// Affiche le menu du forgeron
 func printForgeMenu(items []ForgeItem) {
-	color.Cyan("+----------------------------------------+")
-	color.Cyan("|               Forgeron                 |")
-	color.Cyan("+----------------------------------------+")
+	color.Cyan("+--------------------------------------------+")
+	color.Cyan("|                 Forgeron                   |")
+	color.Cyan("+--------------------------------------------+")
 
 	for i, it := range items {
 		// Construire la liste des matériaux
@@ -177,27 +176,20 @@ func printForgeMenu(items []ForgeItem) {
 			first = false
 		}
 
-		// Affichage aligné
-		fmt.Printf("| %d) %-15s | %s\n", i+1, it.Name, matList)
+		switch i {
+		case 0:
+			color.Yellow("| 1) Casque  | " + matList + "                     |")
+		case 1:
+			color.Blue("| 2) Tunique | " + matList + "     |")
+		case 2:
+			color.Green("| 3) Bottes  | " + matList + "                       |")
+		}
 	}
 
-	color.Cyan("| 0) Quitter                             |")
-	color.Cyan("+----------------------------------------+")
+	color.Cyan("| 0) Quitter                                 |")
+	color.Cyan("+--------------------------------------------+")
 }
 
-// Génère le message de forge correct selon le genre/nombre
-func forgeMessage(name, gender string) string {
-	switch gender {
-	case "f":
-		return fmt.Sprintf("%s a été forgée et ajoutée à votre équipement !", name)
-	case "fp":
-		return fmt.Sprintf("%s ont été forgées et ajoutées à votre équipement !", name)
-	default: // masculin singulier
-		return fmt.Sprintf("%s a été forgé et ajouté à votre équipement !", name)
-	}
-}
-
-// Fonction principale de la forge
 func Forge(personnage *Character) {
 	forgeArt := `
   ______                     
@@ -211,20 +203,20 @@ func Forge(personnage *Character) {
 `
 	color.HiBlack("%s\n", forgeArt)
 
-	// Les items du forgeron (forgeables une seule fois chacun)
+	// Les items du forgeron
 	forgeItems := []ForgeItem{
-		{"Casque de garde", map[string]int{"Lingot": 1}, "m"},
-		{"Tunique royale", map[string]int{"Lingot": 1, "Tissu royal": 1}, "f"},
-		{"Bottes", map[string]int{"Cuir": 1}, "fp"},
+		{"Casque de garde", map[string]int{"Lingot": 1}, 0},
+		{"Tunique royale", map[string]int{"Lingot": 1, "Tissu royal": 1}, 0},
+		{"Bottes", map[string]int{"Cuir": 1}, 0},
 	}
 
 	for {
 		printForgeMenu(forgeItems)
-		fmt.Println("\nInventaire actuel :", personnage.Inventory)
+		fmt.Println("\nInventaire :", personnage.Inventory)
 
 		var choix int
 		fmt.Print("Votre choix : ")
-		fmt.Scan(&choix)
+		fmt.Scanln(&choix)
 
 		if choix == 0 {
 			fmt.Println("Au revoir !")
@@ -238,8 +230,6 @@ func Forge(personnage *Character) {
 
 		selectedItem := forgeItems[choix-1]
 		canForge := true
-
-		// Vérifier si le joueur a tous les matériaux nécessaires
 		for mat, qty := range selectedItem.Materials {
 			if personnage.CountItem(mat) < qty {
 				fmt.Printf("Il vous manque %dx %s pour forger %s.\n", qty, mat, selectedItem.Name)
@@ -250,18 +240,18 @@ func Forge(personnage *Character) {
 			continue
 		}
 
-		// Retirer les matériaux de l'inventaire
+		// Retirer matériaux
 		for mat, qty := range selectedItem.Materials {
 			for i := 0; i < qty; i++ {
 				personnage.RemoveItem(mat)
 			}
 		}
 
-		// Ajouter l'item forgé à l'équipement
-		personnage.AddEquipment(selectedItem.Name)
-		fmt.Println(forgeMessage(selectedItem.Name, selectedItem.Gender))
+		// Ajouter item forgé
+		personnage.AddInventory(selectedItem.Name)
+		fmt.Println(selectedItem.Name, "a été forgé et ajouté à votre inventaire !")
 
-		// Supprimer l'item de la forge (forgeable une seule fois)
+		// Supprimer de la forge
 		forgeItems = append(forgeItems[:choix-1], forgeItems[choix:]...)
 
 		if len(forgeItems) == 0 {

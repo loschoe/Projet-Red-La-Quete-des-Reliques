@@ -128,8 +128,10 @@ func CombatTurn(player *Character, monster *Monster, turn int) {
 
 	fmt.Println("\n=== Attaques disponibles ===")
 
-	// Attaque de base toujours disponible
-	color.Red("1. Attaque Coup de poing")
+	// Affiche toutes les compétences de la classe choisie
+	for i, skill := range player.Skills {
+    	color.Red("%d. Attaque %s", i+1, skill)
+	}
 
 	// Master Sword → débloque "Épée tranchante"
 	if player.HasItem("Master Sword") {
