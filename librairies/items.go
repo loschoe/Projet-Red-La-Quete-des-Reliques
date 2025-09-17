@@ -125,3 +125,35 @@ func (player *Character) UseFireBall(monster *Monster) {
 
     player.FireBallUsed = true // ← marque Fire Ball comme utilisée
 }
+
+// ================== Equipement ================================
+// Vérifie si un objet est équipé
+func (c *Character) HasEquipment(item string) bool {
+    for _, i := range c.Equipment {
+        if i == item {
+            return true
+        }
+    }
+    return false
+}
+
+// Applique les bonus des équipements au personnage
+func (c *Character) ApplyEquipmentBonus() {
+    if c.EquipmentApplied == nil {
+        c.EquipmentApplied = make(map[string]bool)
+    }
+
+    bonuses := map[string]int{
+        "Casque de garde": 75,
+        "Tunique royale":  300,
+        "Bottes":         25,
+    }
+
+    for item, bonus := range bonuses {
+        if c.HasEquipment(item) && !c.EquipmentApplied[item] {
+            c.PV += bonus
+            color.Green("Votre vie augmente de %d PV grâce à %s !\n", bonus, item)
+            c.EquipmentApplied[item] = true
+        }
+    }
+}

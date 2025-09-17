@@ -76,7 +76,7 @@ func main() {
 	inventory := [10]string{
 		"Fairy",
 		"Master Sword",
-		"...",
+		"Tissu royal",
 		"...",
 		"...",
 		"...",
@@ -108,6 +108,8 @@ func main() {
 	}
 
 	playerPtr := &player
+
+	player.ApplyEquipmentBonus()
 
 	fmt.Printf("Bienvenue, %s ! 👋\n", player.Name)
 	librairies.DisplayInfo(playerPtr)
