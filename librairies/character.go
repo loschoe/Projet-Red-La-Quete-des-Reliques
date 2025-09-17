@@ -20,7 +20,9 @@ type Character struct {
 	HasReceivedDiamond bool     // Cadeau du marchand lors du 1er passage 
 	Rubis              int      // Argent du jeu 
 	Attack             int      // Les points d'attaque du joueur 
-	GameOver		   bool     // Détection de la fin du jeu ou d'une mort 
+	GameOver		   bool     // Détection de la fin du jeu ou d'une mort
+	Skills 		       []string // Compétences spéciales du personnage
+	FireBallUsed       bool     // indique si Fire Ball a été utilisé dans le combat courant
 }
 
 // Initialisation d'un personnage
@@ -46,6 +48,8 @@ func InitCharacter(name string, classe string, level int, max_pv int, pv int, in
 		Rubis:     900,
 		Attack:    6,
 		GameOver : false,
+		Skills:    []string{"Coup de poing"},
+		FireBallUsed: false,
 	}
 }
 
@@ -149,6 +153,16 @@ func (c *Character) IsInventoryFull() bool {
 	return count >= c.InventoryCapacity
 }
 
+// Vérifie si le joueur a un item précis
+func (c *Character) HasItem(item string) bool {
+	for _, i := range c.Inventory {
+		if i == item {
+			return true
+		}
+	}
+	return false
+}
+
 
 // Vérifier si le personnage est mort
 func (c *Character) IsDead() {
@@ -173,6 +187,14 @@ func (c *Character) UseItemAt(index int, monster *Monster) {
 	case "Fairy":	// Une fée (potion de soin)
 		c.TakePot()
 		c.Inventory[index] = ""
+
+	case "Three Force Book":
+	if monster != nil {
+		c.UseFireBall(monster) // Lance Fire Ball sur le monstre
+	} else {
+		fmt.Println("Vous ne pouvez pas lancer Fire Ball hors combat !")
+	}
+	c.Inventory[index] = "" // Retire l'item après usage
 
 	case "Miasme": // Un miasme (potion de poison)
 		var choix int

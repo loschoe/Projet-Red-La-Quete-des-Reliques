@@ -5,6 +5,7 @@ package librairies
 
 import (
 	"github.com/fatih/color" // Couleurs 
+	"fmt" 				  // Pour les prints
 )
 
 //=================== EPEE ==================================
@@ -94,4 +95,33 @@ func (personnage *Character) UseBow(monster *Monster) {
 
 	// Retirer la flèche utilisée
 	personnage.RemoveItemAt(arrowIndex)
+}
+
+//=================== Sort ==========================
+func (player *Character) UseFireBall(monster *Monster) {
+    if player.FireBallUsed {
+        fmt.Println("❌ Vous avez déjà utilisé Zelda Book dans ce combat !")
+        return
+    }
+
+    // Inflige 70 dégâts au monstre
+    damage := 70
+    monster.PV -= damage
+    if monster.PV < 0 {
+        monster.PV = 0
+    }
+
+    // Restaure 15 PV au joueur
+    heal := 15
+    player.PV += heal
+    if player.PV > player.Max_PV {
+        player.PV = player.Max_PV
+    }
+
+    // Affichage
+    color.Red("\n%s appelle la princesse Zelda à son secours et Zelda inflige %d dégâts à %s !\n", player.Name, damage, monster.Name)
+    color.Green("%s récupère %d PV ! PV actuels : %d/%d\n\n", player.Name, heal, player.PV, player.Max_PV)
+    color.Green("PV restants de %s : %d/%d\n\n", monster.Name, monster.PV, monster.Max_PV)
+
+    player.FireBallUsed = true // ← marque Fire Ball comme utilisée
 }
