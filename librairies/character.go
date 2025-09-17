@@ -21,7 +21,10 @@ type Character struct {
 	HasReceivedDiamond bool     // Cadeau du marchand lors du 1er passage 
 	Rubis              int      // Argent du jeu 
 	Attack             int      // Les points d'attaque du joueur 
-	GameOver		   bool     // Détection de la fin du jeu ou d'une mort 
+	GameOver		   bool     // Détection de la fin du jeu ou d'une mort
+	Equipment          [3]string // Stocker les équipements dans un array
+	Skills			   []string // Stocker les compétences dans un slice
+	FireBallUsed       bool     // Pour savoir si le joueur a utilisé Fire Ball dans le combat actuel
 }
 
 // ------------- INITIALISATION -------------------------
@@ -56,6 +59,8 @@ func InitCharacter(name string, classe string, level int, max_pv int, pv int, in
 		Rubis:     900,
 		Attack:    6,
 		GameOver : false,
+		Equipment: baseEquipment,
+		FireBallUsed: false,
 	}
 }
 
