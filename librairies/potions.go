@@ -24,6 +24,22 @@ func (personnage *Character) TakePot() {
 	color.Red("Aucune Fée disponible.")
 }
 
+// -------- Venaison divine --------
+func (personnage *Character) TakeMeat() {
+	for i, item := range personnage.Inventory {
+		if item == "Divine Venison" {
+			personnage.PV += 20
+			if personnage.PV > personnage.Max_PV {
+				personnage.PV = personnage.Max_PV
+			}
+			println(personnage.Name, "déguste une pièce de Boeuf d'exception ! PV =", personnage.PV, "/", personnage.Max_PV)
+			personnage.Inventory[i] = "..."
+			return
+		}
+	}
+	color.Red("Aucune Fée disponible.")
+}
+
 // -------- POTION DE POISON (buvable) --------
 func (personnage *Character) Poisonbottle() {
 	for i, item := range personnage.Inventory {

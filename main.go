@@ -15,15 +15,17 @@ func Menu(c1 *librairies.Character) {
 		fmt.Println("+-------------------------------+")
 		color.Cyan("|             MENU              |")
 		fmt.Println("+-------------------------------+")
-		color.Blue("|👕 Infos personnage [P]        |")		// Diplay info 
+		color.Blue("|📜 Infos personnage [P]        |")		// Diplay info 
 		color.Blue("|🎒 Inventaire [I]              |")		// AccessInventory
+		color.Blue("|👕 Équipement [E]              |")      // AccessEquipment
 		color.Green("|🌟 Potion de soin [S]          |")	// TakePot	
+		color.Green("|🍽️  Manger [R]                  |")   // TakeMeat
 		color.HiGreen("|☠️  Boire un poison [U]         |")	// PoisonBottle 
 		color.HiBlack("|💶 Magasin [M]                 |")	// Merchant 
-		color.HiBlack("|⚔️  Forgeron [F]                |")	// Forge 
-		color.HiRed("|🛡️  Combat [C]                  |")	 // Combat Menu 	
+		color.HiBlack("|⚒️  Forgeron [F]                |")	// Forge 
+		color.HiRed("|⚔️  Combat [C]                  |")	 // Combat Menu 	
 		color.HiRed("|                               |")
-		color.Red("|❌ Quitter le jeu [Exit]       |")		// Exit 
+		color.Red("|🪦  Quitter le jeu [Exit]       |")		// Exit 
 		fmt.Println("+-------------------------------+")
 
 		color.Yellow("\nVotre choix ? ")
@@ -35,8 +37,12 @@ func Menu(c1 *librairies.Character) {
 			librairies.DisplayInfo(c1)
 		case "I":
 			c1.AccessInventory()
+		case "E":
+			c1.AccessEquipment()
 		case "S":
 			c1.TakePot()
+		case "R":
+			c1.TakeMeat()	
 		case "U":
 			c1.Poisonbottle()
 		case "M":
@@ -79,6 +85,12 @@ func main() {
 		"...",
 	}
 
+	equipment := [3]string{
+		"...",
+		"...",
+		"...",
+	}
+
 	var player librairies.Character
 
 	// Proposer un pseudo personnalisé
@@ -92,6 +104,7 @@ func main() {
 			100,
 			500,
 			inventory,
+			equipment,
 		)
 	} else { // Sinon, le personnage de base
 		player = librairies.InitCharacter(
@@ -101,6 +114,7 @@ func main() {
 			500,
 			100,
 			inventory,
+			equipment,
 		)
 	}
 
