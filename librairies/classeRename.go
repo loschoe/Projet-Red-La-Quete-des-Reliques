@@ -1,0 +1,122 @@
+package librairies
+
+import (
+	"fmt"
+)
+
+// ---------------- CHOIX DE CLASSE ----------------
+
+// Permet au joueur de choisir sa classe
+func ChooseClass() string {
+	var input, confirm string
+	classes := []string{"Hylien", "Zora", "Goron"}
+
+	for {
+		fmt.Println("Choisissez la classe de votre personnage : Hylien, Zora ou Goron.")
+		fmt.Print("Classe : ")
+		fmt.Scanln(&input)
+
+		input = FormatName(input) // Utilise la fonction déjà définie dans characterRename.go
+
+		// Vérifie que la classe est valide
+		valid := false
+		for _, c := range classes {
+			if input == c {
+				valid = true
+				break
+			}
+		}
+
+		if !valid {
+			fmt.Println("Classe invalide ! Veuillez choisir parmi : Hylien, Zora ou Goron.")
+			continue
+		}
+
+		fmt.Printf("Classe choisie : %s\n", input)
+		fmt.Print("Voulez-vous confirmer cette classe ? (y/n) : ")
+		fmt.Scanln(&confirm)
+
+		if len(confirm) > 0 {
+			c := confirm[0]
+			if c >= 'A' && c <= 'Z' {
+				c += 32
+			}
+			confirm = string(c)
+		}
+
+		if confirm == "y" || confirm == "o" { // 'o' pour "oui"
+			return input
+		} else if confirm == "n" {
+			fmt.Println("Recommencez la sélection de la classe.")
+			continue
+		} else {
+			fmt.Println("Réponse invalide, veuillez répondre par 'y' ou 'n'.")
+		}
+	}
+}
+
+// ---------------- CREATION DE PERSONNAGE ----------------
+
+// Crée un personnage complet avec nom, classe, stats et inventaire
+func CreateCharacter() Character {
+	// 1️⃣ Choix du pseudo
+	name := CharacterCreation()
+	if name == "" {
+		name = "Link" // Nom par défaut si pas de pseudo
+	}
+
+	// 2️⃣ Choix de la classe
+	classe := ChooseClass()
+
+	// 3️⃣ Initialisation des caractéristiques selon la classe
+	var maxPV, pv, attack int
+	var skills []string
+
+	switch classe {
+	case "Hylien":
+    	maxPV = 500       // PV max pour Hylien
+    	pv = 100         // PV actuels de départ (50%)
+    	attack = 6
+    	skills = []string{"Coup de Poing"}
+	case "Zora":
+    	maxPV = 500        // PV max pour Zora
+    	pv = 150           // PV actuels de départ
+    	attack = 10
+    	skills = []string{"Aquatique"}
+	case "Goron":
+    	maxPV = 500       // PV max pour Goron
+    	pv = 200          // PV actuels de départ
+    	attack = 4
+    	skills = []string{"Roulade"}
+	default:
+    	maxPV = 500
+    	pv = 100
+    	attack = 6
+    	skills = []string{"Coup de Poing"}
+	}
+
+
+	// 4️⃣ Inventaire et équipement par défaut
+	inventory := [10]string{
+		"...", 
+		"...",
+		"...",
+		"...",
+		"...",
+		"...",
+		"...",
+		"...",
+		"...",
+		"...",
+	}
+	equipment := [3]string{"...", "...", "..."}
+
+	// 5️⃣ Création du personnage
+
+	player := InitCharacter(name, classe, 1, maxPV, pv, inventory, equipment)
+	player.Attack = attack
+	player.Skills = skills
+	player.FireBallUsed = false
+
+	return player
+}
