@@ -133,6 +133,9 @@ func CombatTurn(player *Character, monster *Monster, turn int) {
     	color.Red("%d. Attaque %s", i+1, skill)
 	}
 
+	// Attaque de base toujours disponible
+	color.Red("1. Attaque Coup de poing")
+
 	// Master Sword → débloque "Épée tranchante"
 	if player.HasItem("Master Sword") {
     	color.Red("2. Épée tranchante")
