@@ -48,6 +48,7 @@ var shopItems = []ShopItem{
 	{"Upgrade kit", 10, 0, 0},
 	{"Upgrade kit", 10, 0, 0},
 	{"Upgrade kit", 10, 0, 0},
+	{"Zelda Book", 50, 0, 10},
 }
 
 // ------------- Fonctions du magasin ----------------

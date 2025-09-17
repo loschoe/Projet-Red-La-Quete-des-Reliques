@@ -126,13 +126,34 @@ func CombatTurn(player *Character, monster *Monster, turn int) {
 	color.Green("Adversaire : %s | PV : %d/%d\n", monster.Name, monster.PV, monster.Max_PV)
 	color.Green("%s | PV : %d/%d\n\n", player.Name, player.PV, player.Max_PV)
 
-	// Les différentes actions possible du joueur 
+	fmt.Println("\n=== Attaques disponibles ===")
+
+	// Attaque de base toujours disponible
 	color.Red("1. Attaque Coup de poing")
-	color.Red("2. Epée tranchante")
-	color.Red("3. Pluie de flèches")
-	color.Yellow("4. Inventaire / Utiliser objet")
-	color.Cyan("5. Fuir (retour menu)")
+
+	// Master Sword → débloque "Épée tranchante"
+	if player.HasItem("Master Sword") {
+    	color.Red("2. Épée tranchante")
+	}
+
+	// Arc → débloque "Pluie de flèches"
+	if player.HasItem("Bow") {
+    	color.Red("3. Pluie de flèches")
+	}
+
+	// Zelda Book → débloque "Boule de feu" 
+	if player.HasItem("Zelda Book") && !player.FireBallUsed {
+    color.Red("4. Zelda Book")
+	}
+
+	// Inventaire
+	color.Yellow("5. Inventaire / Utiliser objet")
+
+	// Fuite
+	color.Cyan("6. Fuir (retour menu)")
+
 	fmt.Print("\nVotre choix : ")
+
 
 	var choice int
 	fmt.Scanln(&choice)
@@ -160,6 +181,16 @@ func CombatTurn(player *Character, monster *Monster, turn int) {
 		time.Sleep(1 * time.Second)
 
 	case 4:
+    if !player.FireBallUsed {
+        player.UseFireBall(monster)
+        player.FireBallUsed = true // marque comme utilisé
+    } else {
+        fmt.Println("Vous avez déjà utilisé Fire Ball ce combat !")
+    }
+    time.Sleep(1 * time.Second)
+
+
+	case 5:
 		player.AccessInventory()
 		fmt.Print("Choisissez un objet à utiliser : ")
 		var itemChoice int
@@ -188,7 +219,7 @@ func CombatTurn(player *Character, monster *Monster, turn int) {
 			fmt.Println("Cet objet ne peut pas être utilisé !")
 		}
 
-	case 5:
+	case 6:
 		fmt.Println("Vous prenez la fuite... retour au menu principal.")
 		player.PV = 0
 
@@ -236,6 +267,7 @@ func CombatMenu(player *Character) {
 // ------------------- Combat Bokoblin -------------------
 
 func TrainingFight(player *Character) {
+	player.FireBallUsed = false
 	bokoblin := InitBokoblin("Bokoblin", 40, 40, 5)
 	turn := 1
 	for player.PV > 0 && bokoblin.PV > 0 {
@@ -264,6 +296,7 @@ func TrainingFight(player *Character) {
 // ------------------- Combat Boss -------------------
 
 func StartFight(player *Character, monster Monster, pattern func(*Monster, *Character, int)) {
+	player.FireBallUsed = false
 	turn := 1
 	for player.PV > 0 && monster.PV > 0 {
 		CharTurn(player, &monster, turn)
@@ -278,6 +311,7 @@ func StartFight(player *Character, monster Monster, pattern func(*Monster, *Char
 		color.Yellow("\n%s a été vaincu 🎉\n", monster.Name)
 		switch monster.Name {
 		case "Moblin":
+			player.FireBallUsed = false
 			// Si c’est un Moblin
 			player.Rubis += 30
 			player.Level += 2

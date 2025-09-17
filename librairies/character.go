@@ -15,14 +15,13 @@ type Character struct {
 	Level              int
 	Max_PV             int
 	PV                 int
-	Inventory          []string  // Stocker les items dans un slice
-	InventoryCapacity  int       // Capacité de l'inventaire
-	InventoryUpgrades  int       // 3 améliorations possibles
-	Equipment          [3]string // Stocker les tenues dans un array de 3 cases
-	HasReceivedDiamond bool      // Cadeau du marchand lors du 1er passage
-	Rubis              int       // Argent du jeu
-	Attack             int       // Les points d'attaque du joueur
-	GameOver           bool      // Détection de la fin du jeu ou d'une mort
+	Inventory          []string // Stocker les items dans un slice 
+	InventoryCapacity  int      // Modifier la capacité de l'inventaire     
+	InventoryUpgrades  int      // 3 améliorations possibles     
+	HasReceivedDiamond bool     // Cadeau du marchand lors du 1er passage 
+	Rubis              int      // Argent du jeu 
+	Attack             int      // Les points d'attaque du joueur 
+	GameOver		   bool     // Détection de la fin du jeu ou d'une mort 
 }
 
 // ------------- INITIALISATION -------------------------
@@ -54,10 +53,9 @@ func InitCharacter(name string, classe string, level int, max_pv int, pv int, in
 		Inventory:         baseInventory,
 		InventoryCapacity: 10,
 		InventoryUpgrades: 0,
-		Equipment:         baseEquipment,
-		Rubis:             900,
-		Attack:            6,
-		GameOver:          false,
+		Rubis:     900,
+		Attack:    6,
+		GameOver : false,
 	}
 }
 
@@ -161,6 +159,16 @@ func (c *Character) IsInventoryFull() bool {
 	return count >= c.InventoryCapacity
 }
 
+// Vérifie si le joueur a un item précis
+func (c *Character) HasItem(item string) bool {
+	for _, i := range c.Inventory {
+		if i == item {
+			return true
+		}
+	}
+	return false
+}
+
 // ------------- EQUIPEMENT -------------------------
 
 // Accéder à l'équipement
@@ -201,5 +209,41 @@ func (c *Character) IsDead() {
 		color.HiRed("%s est mort ! ⚰️\n", c.Name)
 		c.PV = c.Max_PV / 2
 		color.Green("%s est ressuscité avec %d/%d PV ! ✨\n", c.Name, c.PV, c.Max_PV)
+	}
+}
+
+
+// Utiliser un item en combat 
+func (c *Character) UseItemAt(index int, monster *Monster) {
+	if index < 0 || index >= len(c.Inventory) || c.Inventory[index] == "" || c.Inventory[index] == "..." {
+		fmt.Println("Case invalide ou vide !")
+		return
+	}
+
+	item := c.Inventory[index]
+
+	switch item {
+	case "Fairy":	// Une fée (potion de soin)
+		c.TakePot()
+		c.Inventory[index] = ""
+
+	case "Miasme": // Un miasme (potion de poison)
+		var choix int
+		fmt.Println("Que voulez-vous faire avec le poison ? (1 = boire, 2 = lancer sur le monstre) :")
+		fmt.Scan(&choix)
+
+		if choix == 1 {
+			c.Poisonbottle() 			// dégâts sur le joueur
+		} else if choix == 2 {
+			if monster != nil {
+				c.PoisonPot(monster) 	// dégâts sur le monstre
+			} else {
+				fmt.Println("Aucun monstre cible pour Miasme !")
+			}
+		} else {
+			fmt.Println("Choix invalide, aucune action effectuée.")
+		}
+	default:
+		fmt.Println("Cet objet ne peut pas être utilisé !")
 	}
 }
