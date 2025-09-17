@@ -67,6 +67,7 @@ func Menu(c1 *librairies.Character) {
 
 
 // ----------------- LANCEMENT ------------------------------
+// ----------------- LANCEMENT ------------------------------
 func main() {
 	// Lancer le jeu
 	librairies.StartGame()
@@ -91,37 +92,22 @@ func main() {
 		"...",
 	}
 
-	var player librairies.Character
+	// 1️⃣ Création complète du personnage (nom + classe + stats)
+	player := librairies.CreateCharacter()
 
-	// Proposer un pseudo personnalisé
-	name := librairies.CharacterCreation()
-
-	if name != "" { // Si le joueur a choisi un pseudo
-		player = librairies.InitCharacter(
-			name,
-			"Hylien",
-			1,
-			100,
-			500,
-			inventory,
-			equipment,
-		)
-	} else { // Sinon, le personnage de base
-		player = librairies.InitCharacter(
-			"Link",
-			"Hylien",
-			1,
-			500,
-			100,
-			inventory,
-			equipment,
-		)
+	// 2️⃣ Ajout de l’inventaire et de l’équipement de départ
+	for i := 0; i < len(inventory); i++ {
+		if inventory[i] != "..." && inventory[i] != "" {
+			player.AddInventory(inventory[i])
+		}
+	}
+	for i := 0; i < len(equipment); i++ {
+		if equipment[i] != "..." && equipment[i] != "" {
+			player.AddEquipment(equipment[i])
+		}
 	}
 
 	playerPtr := &player
-	
-	player.ApplyEquipmentBonus()
-
 
 	player.ApplyEquipmentBonus()
 

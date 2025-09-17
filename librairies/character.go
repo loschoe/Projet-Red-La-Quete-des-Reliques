@@ -1,11 +1,8 @@
-// Ce fichier contient toutes les fonctions nécéssaires au personnage et à son fonctionnement 
-// Le paquet de la librairie où sont stockées les fonctions 
-
 package librairies
 
 import (
-	"fmt"              // Pour les prints
-	"github.com/fatih/color" // Pour afficher en couleurs dans la console
+	"fmt"              
+	"github.com/fatih/color" 
 )
 
 // Structure joueur
@@ -15,18 +12,17 @@ type Character struct {
 	Level              int
 	Max_PV             int
 	PV                 int
-	Inventory          []string // Stocker les items dans un slice 
-	InventoryCapacity  int      // Modifier la capacité de l'inventaire     
-	InventoryUpgrades  int      // 3 améliorations possibles     
-	HasReceivedDiamond bool     // Cadeau du marchand lors du 1er passage 
-	Rubis              int      // Argent du jeu 
-	Attack             int      // Les points d'attaque du joueur 
-	GameOver		   bool     // Détection de la fin du jeu ou d'une mort
-	Equipment          [3]string // Stocker les équipements dans un array
-	EquipmentApplied   map[string]bool // Pour savoir si un équipement a été appliqué
-	EquipmentApplied  map[string]bool // Appliquer une seule fois les bonus
-	Skills			   []string // Stocker les compétences dans un slice
-	FireBallUsed       bool     // Pour savoir si le joueur a utilisé Fire Ball dans le combat actuel
+	Inventory          []string 
+	InventoryCapacity  int      
+	InventoryUpgrades  int      
+	HasReceivedDiamond bool     
+	Rubis              int      
+	Attack             int      
+	GameOver           bool     
+	Equipment          [3]string 
+	EquipmentApplied   map[string]bool 
+	Skills             []string 
+	FireBallUsed       bool     
 }
 
 // ------------- INITIALISATION -------------------------
@@ -58,13 +54,12 @@ func InitCharacter(name string, classe string, level int, max_pv int, pv int, in
 		Inventory:         baseInventory,
 		InventoryCapacity: 10,
 		InventoryUpgrades: 0,
-		Rubis:     900,
-		Attack:    6,
-		GameOver : false,
-		Equipment: baseEquipment,
-		EquipmentApplied: make(map[string]bool),
-		EquipmentApplied: make(map[string]bool),
-		FireBallUsed: false,
+		Rubis:             900,
+		Attack:            6,
+		GameOver:          false,
+		Equipment:         baseEquipment,
+		EquipmentApplied:  make(map[string]bool),
+		FireBallUsed:      false,
 	}
 }
 
@@ -180,53 +175,34 @@ func (c *Character) HasItem(item string) bool {
 
 // ================== Equipement ================================
 
-// Applique les bonus des équipements au personnage
-
 // Ajouter un équipement
 func (c *Character) AddEquipment(item string) {
-    for i := 0; i < len(c.Equipment); i++ {
-        if c.Equipment[i] == "" || c.Equipment[i] == "..." {
-            c.Equipment[i] = item
-            // Appliquer immédiatement le bonus
-            c.ApplyEquipmentBonus()
-            return
-        }
-    }
-    fmt.Println("Impossible d'ajouter l'équipement :", item, "(tous les slots sont pleins)")
-}
-
-// ================== Equipement ================================
-
-// Applique les bonus des équipements au personnage
-
-// Ajouter un équipement
-func (c *Character) AddEquipment(item string) {
-    for i := 0; i < len(c.Equipment); i++ {
-        if c.Equipment[i] == "" || c.Equipment[i] == "..." {
-            c.Equipment[i] = item
-            // Appliquer immédiatement le bonus
-            c.ApplyEquipmentBonus()
-            return
-        }
-    }
-    fmt.Println("Impossible d'ajouter l'équipement :", item, "(tous les slots sont pleins)")
+	for i := 0; i < len(c.Equipment); i++ {
+		if c.Equipment[i] == "" || c.Equipment[i] == "..." {
+			c.Equipment[i] = item
+			// Appliquer immédiatement le bonus
+			c.ApplyEquipmentBonus()
+			return
+		}
+	}
+	fmt.Println("Impossible d'ajouter l'équipement :", item, "(tous les slots sont pleins)")
 }
 
 func (c *Character) AccessEquipment() {
-    fmt.Println("\nÉquipement du personnage :")
-    vide := true
-    for i, item := range c.Equipment {
-        if item == "" || item == "..." {
-            fmt.Printf("%d. [vide]\n", i+1)
-        } else {
-            fmt.Printf("%d. %s\n", i+1, item)
-            vide = false
-        }
-    }
-    if vide {
-        fmt.Println("Équipement vide.")
-    }
-    fmt.Println()
+	fmt.Println("\nÉquipement du personnage :")
+	vide := true
+	for i, item := range c.Equipment {
+		if item == "" || item == "..." {
+			fmt.Printf("%d. [vide]\n", i+1)
+		} else {
+			fmt.Printf("%d. %s\n", i+1, item)
+			vide = false
+		}
+	}
+	if vide {
+		fmt.Println("Équipement vide.")
+	}
+	fmt.Println()
 }
 
 // ------------- ETAT DU PERSONNAGE -------------------------
@@ -239,7 +215,6 @@ func (c *Character) IsDead() {
 		color.Green("%s est ressuscité avec %d/%d PV ! ✨\n", c.Name, c.PV, c.Max_PV)
 	}
 }
-
 
 // Utiliser un item en combat 
 func (c *Character) UseItemAt(index int, monster *Monster) {
