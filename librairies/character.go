@@ -54,7 +54,7 @@ func InitCharacter(name string, classe string, level int, max_pv int, pv int, in
 		Inventory:         baseInventory,
 		InventoryCapacity: 10,
 		InventoryUpgrades: 0,
-		Rubis:             900,
+		Rubis:             100,
 		Attack:            6,
 		GameOver:          false,
 		Equipment:         baseEquipment,

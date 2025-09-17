@@ -75,7 +75,7 @@ func main() {
 	// Initialiser l'inventaire de base du joueur au début du jeu avec la potion offerte 
 	inventory := [10]string{
 		"Fairy",
-		"Master Sword",
+		"...",
 		"...",
 		"...",
 		"...",

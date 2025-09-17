@@ -6,6 +6,7 @@ package librairies
 import (
 	"fmt"
 	"github.com/fatih/color"
+	"strings"
 )
 
 // ------------- Structures ----------------
@@ -157,13 +158,21 @@ func Merchant(personnage *Character) {
 	}
 }
 
-// ------------- FORGE ----------------
+// ---------------- FORGE ----------------
+// Items globaux du forgeron (forgeables une seule fois)
+var forgeItems = []ForgeItem{
+	{"Casque de garde", map[string]int{"Lingot": 1}, "m"},
+	{"Tunique royale", map[string]int{"Lingot": 1, "Tissu royal": 1}, "f"},
+	{"Bottes", map[string]int{"Cuir": 1}, "fp"},
+}
 
 // Affiche le menu du forgeron
 func printForgeMenu(items []ForgeItem) {
-	color.Cyan("+------------------------------------------------+")
-	color.Cyan("|                   Forgeron                     |")
-	color.Cyan("+------------------------------------------------+")
+	totalWidth := 48 // largeur de la zone interne (entre les |)
+
+	color.Cyan("+--------------------------------------------------+")
+	color.Cyan("|                    Forgeron                      |")
+	color.Cyan("+--------------------------------------------------+")
 
 	for i, it := range items {
 		// Construire la liste des matériaux
@@ -176,20 +185,28 @@ func printForgeMenu(items []ForgeItem) {
 			matList += fmt.Sprintf("%dx %s", qty, mat)
 			first = false
 		}
-	
-		switch i {
-        case 0:
-            color.Yellow("| 1) Casque  | " + matList + "                         |")
-        case 1:
-            color.Blue("| 2) Tunique | " + matList + "         |")
-        case 2:
-            color.Green("| 3) Bottes  | " + matList + "                           |")
-    	}
+
+		// Construire la ligne (numéro + nom + matériaux)
+		line := fmt.Sprintf("%d) %-15s | %s", i+1, it.Name, matList)
+
+		// Compléter avec des espaces pour atteindre la largeur interne
+		if len(line) < totalWidth {
+			line += strings.Repeat(" ", totalWidth-len(line))
+		}
+
+		color.Yellow("| " + line + " |")
 	}
 
-	color.Cyan("| 0) Quitter                                     |")
-	color.Cyan("+------------------------------------------------+")
+	// Ligne Quitter (même traitement que les autres lignes)
+	quitLine := "0) Quitter"
+	if len(quitLine) < totalWidth {
+		quitLine += strings.Repeat(" ", totalWidth-len(quitLine))
+	}
+	color.Cyan("| " + quitLine + " |")
+
+	color.Cyan("+--------------------------------------------------+")
 }
+
 
 // Génère le message de forge correct selon le genre/nombre
 func forgeMessage(name, gender string) string {
@@ -217,14 +234,12 @@ func Forge(personnage *Character) {
 `
 	color.HiBlack("%s\n", forgeArt)
 
-	// Les items du forgeron (forgeables une seule fois chacun)
-	forgeItems := []ForgeItem{
-		{"Casque de garde", map[string]int{"Lingot": 1}, "m"},
-		{"Tunique royale", map[string]int{"Lingot": 1, "Tissu royal": 1}, "f"},
-		{"Bottes", map[string]int{"Cuir": 1}, "fp"},
-	}
-
 	for {
+		if len(forgeItems) == 0 {
+			fmt.Println("Le forgeron n'a plus d'items. Retour au menu principal.")
+			return
+		}
+
 		printForgeMenu(forgeItems)
 		fmt.Println("\nInventaire actuel :", personnage.Inventory)
 
@@ -269,10 +284,6 @@ func Forge(personnage *Character) {
 
 		// Supprimer l'item de la forge (forgeable une seule fois)
 		forgeItems = append(forgeItems[:choix-1], forgeItems[choix:]...)
-
-		if len(forgeItems) == 0 {
-			fmt.Println("Le forgeron n'a plus d'items. Retour au menu principal.")
-			return
-		}
 	}
 }
+
