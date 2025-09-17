@@ -23,6 +23,7 @@ type Character struct {
 	Attack             int      // Les points d'attaque du joueur 
 	GameOver		   bool     // Détection de la fin du jeu ou d'une mort
 	Equipment          [3]string // Stocker les équipements dans un array
+	EquipmentApplied  map[string]bool // Appliquer une seule fois les bonus
 	Skills			   []string // Stocker les compétences dans un slice
 	FireBallUsed       bool     // Pour savoir si le joueur a utilisé Fire Ball dans le combat actuel
 }
@@ -60,6 +61,7 @@ func InitCharacter(name string, classe string, level int, max_pv int, pv int, in
 		Attack:    6,
 		GameOver : false,
 		Equipment: baseEquipment,
+		EquipmentApplied: make(map[string]bool),
 		FireBallUsed: false,
 	}
 }
@@ -174,9 +176,24 @@ func (c *Character) HasItem(item string) bool {
 	return false
 }
 
-// ------------- EQUIPEMENT -------------------------
+// ================== Equipement ================================
 
-// Accéder à l'équipement
+// Applique les bonus des équipements au personnage
+
+// Ajouter un équipement
+func (c *Character) AddEquipment(item string) {
+	for i := 0; i < len(c.Equipment); i++ {
+		if c.Equipment[i] == "" || c.Equipment[i] == "..." {
+			c.Equipment[i] = item
+			// Appliquer immédiatement le bonus
+			c.ApplyEquipmentBonus()
+			return
+		}
+	}
+	fmt.Println("Impossible d'ajouter l'équipement :", item, "(tous les slots sont pleins)")
+}
+
+// Afficher l'équipement
 func (c *Character) AccessEquipment() {
 	fmt.Println("\nÉquipement du personnage :")
 	vide := true
@@ -192,18 +209,6 @@ func (c *Character) AccessEquipment() {
 		fmt.Println("Équipement vide.")
 	}
 	fmt.Println()
-}
-
-// Ajouter un équipement
-func (c *Character) AddEquipment(item string) {
-	for i := 0; i < len(c.Equipment); i++ {
-		if c.Equipment[i] == "" || c.Equipment[i] == "..." {
-			c.Equipment[i] = item
-			fmt.Println(item, "a été ajouté à l'équipement.")
-			return
-		}
-	}
-	fmt.Println("Impossible d'ajouter l'équipement :", item, "(tous les slots sont pleins)")
 }
 
 // ------------- ETAT DU PERSONNAGE -------------------------

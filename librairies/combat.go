@@ -171,19 +171,17 @@ func CombatTurn(player *Character, monster *Monster, turn int) {
 		color.Green("PV restants de %s : %d/%d\n\n", monster.Name, monster.PV, monster.Max_PV)
 
 	case 2:
-		fmt.Printf("\n%s utilise sa Master Sword !\n", player.Name)
 		player.UseMasterSword(monster)
 		time.Sleep(1 * time.Second)
 
 	case 3:
-		fmt.Printf("\n%s utilise son Arc !\n", player.Name)
 		player.UseBow(monster)
 		time.Sleep(1 * time.Second)
 
 	case 4:
     if !player.FireBallUsed {
         player.UseFireBall(monster)
-        player.FireBallUsed = true // marque comme utilisé
+        player.FireBallUsed = true
     } else {
         fmt.Println("Vous avez déjà utilisé Fire Ball ce combat !")
     }
@@ -320,7 +318,7 @@ func StartFight(player *Character, monster Monster, pattern func(*Monster, *Char
 			player.Attack += 5
 			color.HiMagenta("💥 Votre attaque augmente de 5 ! Nouvelle attaque : %d\n", player.Attack)
 		case "Lynel":
-			drops := []string{"Diamant", "Tissu Royal"}
+			drops := []string{"Diamant", "Tissu royal"}
 			for _, item := range drops {
 				for i := 0; i < len(player.Inventory); i++ {
 					if player.Inventory[i] == "" || player.Inventory[i] == "..." {
