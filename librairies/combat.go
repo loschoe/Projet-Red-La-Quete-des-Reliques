@@ -140,7 +140,7 @@ func CombatTurn(player *Character, monster *Monster, turn int) {
 
 	// Arc → débloque "Pluie de flèches"
 	if player.HasItem("Bow") {
-    	color.Red("3. Pluie de flèches (100 dégâts)"),
+    	color.Red("3. Pluie de flèches (100 dégâts)")
 	}
 
 	// Zelda Book → débloque "Boule de feu" 

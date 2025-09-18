@@ -167,14 +167,14 @@ var forgeItems = []ForgeItem{
 
 // Affiche le menu du forgeron
 func printForgeMenu(items []ForgeItem) {
-	totalWidth := 48 // largeur de la zone interne (entre les |)
+	totalWidth := 48
 
-	color.Cyan("+--------------------------------------------------+")
-	color.Cyan("|                    Forgeron                      |")
-	color.Cyan("+--------------------------------------------------+")
+	// Bordures en blanc
+	fmt.Println(color.WhiteString("+--------------------------------------------------+"))
+	fmt.Println(color.CyanString("|                    Forgeron                      |"))
+	fmt.Println(color.WhiteString("+--------------------------------------------------+"))
 
 	for i, it := range items {
-		// Construire la liste des matériaux
 		matList := ""
 		first := true
 		for mat, qty := range it.Materials {
@@ -185,25 +185,29 @@ func printForgeMenu(items []ForgeItem) {
 			first = false
 		}
 
-		// Construire la ligne (numéro + nom + matériaux)
 		line := fmt.Sprintf("%d) %-15s | %s", i+1, it.Name, matList)
 
-		// Compléter avec des espaces pour atteindre la largeur interne
 		if len(line) < totalWidth {
 			line += strings.Repeat(" ", totalWidth-len(line))
 		}
 
-		color.Yellow("| " + line + " |")
+		fmt.Println(
+			color.WhiteString("| ") +
+				color.YellowString(line) +
+				color.WhiteString(" |"),
+		)
 	}
-
-	// Ligne Quitter (même traitement que les autres lignes)
 	quitLine := "0) Quitter"
 	if len(quitLine) < totalWidth {
 		quitLine += strings.Repeat(" ", totalWidth-len(quitLine))
 	}
-	color.Cyan("| " + quitLine + " |")
+	fmt.Println(
+		color.WhiteString("| ") +
+			color.HiRedString(quitLine) +
+			color.WhiteString(" |"),
+	)
 
-	color.Cyan("+--------------------------------------------------+")
+	fmt.Println(color.WhiteString("+--------------------------------------------------+"))
 }
 
 

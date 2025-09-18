@@ -10,23 +10,34 @@ import (
 )
 
 // ---------------- MENU ----------------
+// Petite fonction utilitaire : affiche une ligne du menu
+func menuItem(text string, c *color.Color) {
+	fmt.Println(
+		color.WhiteString("|") +
+			c.Sprint(text) +
+			color.WhiteString("|"),
+	)
+}
+
 func Menu(c1 *librairies.Character) {
 	for {
-		fmt.Println("+-------------------------------+")
-		color.Cyan("|             MENU              |")
-		fmt.Println("+-------------------------------+")
-		color.Blue("|📜 Infos personnage [P]        |")		// Diplay info 
-		color.Blue("|🎒 Inventaire [I]              |")		// AccessInventory
-		color.Blue("|👕 Équipement [E]              |")      // AccessEquipment
-		color.Green("|🌟 Potion de soin [S]          |")	// TakePot	
-		color.Green("|🍽️  Manger [R]                  |")   // TakeMeat
-		color.HiGreen("|☠️  Boire un poison [U]         |")	// PoisonBottle 
-		color.HiBlack("|💶 Magasin [M]                 |")	// Merchant 
-		color.HiBlack("|⚒️  Forgeron [F]                |")	// Forge 
-		color.HiRed("|⚔️  Combat [C]                  |")	 // Combat Menu 	
-		color.HiRed("|                               |")
-		color.Red("|🪦  Quitter le jeu [Exit]       |")		// Exit 
-		fmt.Println("+-------------------------------+")
+		fmt.Println(color.WhiteString("+-------------------------------+"))
+		color.White("|             MENU              |")
+		fmt.Println(color.WhiteString("+-------------------------------+"))
+
+		menuItem("📜 Infos personnage [P]        ", color.New(color.FgBlue))
+		menuItem("🎒 Inventaire [I]              ", color.New(color.FgBlue))
+		menuItem("👕 Équipement [E]              ", color.New(color.FgBlue))
+		menuItem("🌟 Potion de soin [S]          ", color.New(color.FgGreen))
+		menuItem("🍽️  Manger [R]                  ", color.New(color.FgGreen))
+		menuItem("☠️  Boire un poison [U]         ", color.New(color.FgHiGreen))
+		menuItem("💶 Magasin [M]                 ", color.New(color.FgHiBlack))
+		menuItem("⚒️  Forgeron [F]                ", color.New(color.FgHiBlack))
+		menuItem("⚔️  Combat [C]                  ", color.New(color.FgHiRed))
+		menuItem("                               ", color.New(color.FgHiRed))
+		menuItem("🪦  Quitter le jeu [Exit]       ", color.New(color.FgRed))
+
+		fmt.Println(color.WhiteString("+-------------------------------+"))
 
 		color.Yellow("\nVotre choix ? ")
 		var choice string
