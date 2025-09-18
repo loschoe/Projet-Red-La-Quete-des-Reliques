@@ -140,7 +140,7 @@ func CombatTurn(player *Character, monster *Monster, turn int) {
 
 	// Arc → débloque "Pluie de flèches"
 	if player.HasItem("Bow") {
-    	color.Red("3. Pluie de flèches (100 dégâts)"),
+    	color.Red("3. Pluie de flèches (100 dégâts)")
 	}
 
 	// Zelda Book → débloque "Boule de feu" 
@@ -313,9 +313,9 @@ func StartFight(player *Character, monster Monster, pattern func(*Monster, *Char
 		case "Moblin":
 			player.FireBallUsed = false
 			// Si c’est un Moblin
-			player.Rubis += 35
+			player.Rubis += 40
 			player.Level += 2
-			color.Green("%s reçoit 35 rubis et passe de 2 niveaux !\n", player.Name)
+			color.Green("%s reçoit 40 rubis et passe de 2 niveaux !\n", player.Name)
 			// Si Moblin est mort, augmenter l'attaque de 5
 			player.Attack += 5
 			color.HiMagenta("💥 Votre attaque augmente de 5 ! Nouvelle attaque : %d\n", player.Attack)
@@ -331,9 +331,9 @@ func StartFight(player *Character, monster Monster, pattern func(*Monster, *Char
 					}
 				}
 			}
-			player.Rubis += 50
+			player.Rubis += 100
 			player.Level += 5
-			color.Green("%s reçoit 50 rubis et augmente de 5 niveaux !\n", player.Name)
+			color.Green("%s reçoit 100 rubis et augmente de 5 niveaux !\n", player.Name)
 
 		case "Krrooçe":
 			// Si c’est Krrrooçe
