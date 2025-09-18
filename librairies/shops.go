@@ -37,7 +37,7 @@ var shopItems = []ShopItem{
 	{"Cuir", 10, 0, 0, 1},
 	{"Divine Venison", 30, 0, 25, 2},
 	{"Fairy", 60, 0, 55, 10},
-	{"Lingot", 15, 0, 0, 2},
+	{"Lingot", 20, 0, 0, 2},
 	{"Master Sword", 0, 2, 0, 1},
 	{"Miasme", 25, 0, -45, 5},
 	{"Upgrade kit", 12, 0, 0, 3},

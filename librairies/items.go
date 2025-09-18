@@ -42,7 +42,7 @@ func (personnage *Character) UseMasterSword(monster *Monster) {
 }
 
 //=================== ARC ==========================
-var BowUses = 4 // Compteur d'usage 
+var BowUses = 8 // Compteur d'usage 
 
 func (personnage *Character) UseBow(monster *Monster) {
 	// Vérifie si le personnage a un arc
@@ -105,14 +105,14 @@ func (player *Character) UseFireBall(monster *Monster) {
     }
 
     // Inflige 70 dégâts au monstre
-    damage := 70
+    damage := 170
     monster.PV -= damage
     if monster.PV < 0 {
         monster.PV = 0
     }
 
     // Restaure 15 PV au joueur
-    heal := 15
+    heal := 30
     player.PV += heal
     if player.PV > player.Max_PV {
         player.PV = player.Max_PV

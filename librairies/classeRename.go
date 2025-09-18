@@ -58,6 +58,9 @@ func ChooseClass() string {
 // ---------------- CREATION DE PERSONNAGE ----------------
 
 // Crée un personnage complet avec nom, classe, stats et inventaire
+// ---------------- CREATION DE PERSONNAGE ----------------
+
+// Crée un personnage complet avec nom, classe, stats et inventaire
 func CreateCharacter() Character {
 	// 1️⃣ Choix du pseudo
 	name := CharacterCreation()
@@ -69,22 +72,24 @@ func CreateCharacter() Character {
 	classe := ChooseClass()
 
 	// 3️⃣ Initialisation des caractéristiques selon la classe
-	var maxPV, pv, attack int
+	var maxPV, pv, attack, rubis int // <-- ajout de rubis ici
 	var skills []string
+	rubis = 100 // Tous les personnages commencent avec 100 rubis
 
 	switch classe {
 	case "Hylien":
     	maxPV = 200       // PV max pour Hylien
-    	pv = 100         // PV actuels de départ (50%)
+    	pv = 100          // PV actuels de départ (50%)
     	attack = 6
     	skills = []string{"Coup de Poing"}
 	case "Zora":
     	maxPV = 250       // PV max pour Zora
-    	pv = 150           // PV actuels de départ
+    	pv = 150          // PV actuels de départ
     	attack = 10
     	skills = []string{"Aquatique"}
+		rubis = 200       // Bonus de rubis pour Zora
 	case "Goron":
-    	maxPV = 300      // PV max pour Goron
+    	maxPV = 300       // PV max pour Goron
     	pv = 200          // PV actuels de départ
     	attack = 4
     	skills = []string{"Roulade"}
@@ -94,7 +99,6 @@ func CreateCharacter() Character {
     	attack = 6
     	skills = []string{"Coup de Poing"}
 	}
-
 
 	// 4️⃣ Inventaire et équipement par défaut
 	inventory := [10]string{
@@ -112,10 +116,10 @@ func CreateCharacter() Character {
 	equipment := [3]string{"...", "...", "..."}
 
 	// 5️⃣ Création du personnage
-
 	player := InitCharacter(name, classe, 1, maxPV, pv, inventory, equipment)
 	player.Attack = attack
 	player.Skills = skills
+	player.Rubis = rubis
 	player.FireBallUsed = false
 
 	return player

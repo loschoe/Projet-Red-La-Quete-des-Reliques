@@ -135,17 +135,17 @@ func CombatTurn(player *Character, monster *Monster, turn int) {
 
 	// Master Sword → débloque "Épée tranchante"
 	if player.HasItem("Master Sword") {
-    	color.Red("2. Épée tranchante")
+    	color.Red("2. Épée tranchante (50 dégâts)")
 	}
 
 	// Arc → débloque "Pluie de flèches"
 	if player.HasItem("Bow") {
-    	color.Red("3. Pluie de flèches")
+    	color.Red("3. Pluie de flèches (100 dégâts)"),
 	}
 
 	// Zelda Book → débloque "Boule de feu" 
 	if player.HasItem("Zelda Book") && !player.FireBallUsed {
-    color.Red("4. Zelda Book")
+    color.Red("4. Zelda Book (170 dégâts, +30 PV)")
 	}
 
 	// Inventaire
@@ -253,7 +253,7 @@ func CombatMenu(player *Character) {
     case 2:
         StartFight(player, InitMoblin("Moblin", 100, 100, 20), (*Monster).MoblinPattern)
     case 3:
-        StartFight(player, InitLynel("Lynel", 270, 270, 50), (*Monster).LynelPattern)
+        StartFight(player, InitLynel("Lynel", 280, 280, 50), (*Monster).LynelPattern)
     case 4:
         StartFight(player, InitKrrooçe("Krrooçe", 450, 450, 75), (*Monster).KrrrooçePattern)
     case 5:
@@ -320,6 +320,7 @@ func StartFight(player *Character, monster Monster, pattern func(*Monster, *Char
 			player.Attack += 5
 			color.HiMagenta("💥 Votre attaque augmente de 5 ! Nouvelle attaque : %d\n", player.Attack)
 		case "Lynel":
+			// Si c’est un Lynel
 			drops := []string{"Diamant", "Tissu royal"}
 			for _, item := range drops {
 				for i := 0; i < len(player.Inventory); i++ {
@@ -330,6 +331,10 @@ func StartFight(player *Character, monster Monster, pattern func(*Monster, *Char
 					}
 				}
 			}
+			player.Rubis += 50
+			player.Level += 5
+			color.Green("%s reçoit 50 rubis et augmente de 5 niveaux !\n", player.Name)
+
 		case "Krrooçe":
 			// Si c’est Krrrooçe
 			color.HiRed("\n%s a été vaincu ! FIN DU JEU 🎉\n", monster.Name)
