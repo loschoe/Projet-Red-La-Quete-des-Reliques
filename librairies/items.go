@@ -144,14 +144,18 @@ func (c *Character) ApplyEquipmentBonus() {
     }
 
     bonuses := map[string]int{
-        "Casque de garde": 75,
-        "Tunique royale":  300,
-        "Bottes":         25,
+        "Casque de garde": 50,
+        "Tunique royale":  100,
+        "Bottes":         50,
     }
 
     for item, bonus := range bonuses {
         if c.HasEquipment(item) && !c.EquipmentApplied[item] {
             c.PV += bonus
+			c.Max_PV += bonus
+			if c.PV > c.Max_PV {
+				c.PV = c.Max_PV
+			}
             color.Green("Votre vie augmente de %d PV grâce à %s !\n", bonus, item)
             c.EquipmentApplied[item] = true
         }

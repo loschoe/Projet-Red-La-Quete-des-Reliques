@@ -74,22 +74,22 @@ func CreateCharacter() Character {
 
 	switch classe {
 	case "Hylien":
-    	maxPV = 500       // PV max pour Hylien
+    	maxPV = 200       // PV max pour Hylien
     	pv = 100         // PV actuels de départ (50%)
     	attack = 6
     	skills = []string{"Coup de Poing"}
 	case "Zora":
-    	maxPV = 500        // PV max pour Zora
+    	maxPV = 250       // PV max pour Zora
     	pv = 150           // PV actuels de départ
     	attack = 10
     	skills = []string{"Aquatique"}
 	case "Goron":
-    	maxPV = 500       // PV max pour Goron
+    	maxPV = 300      // PV max pour Goron
     	pv = 200          // PV actuels de départ
     	attack = 4
     	skills = []string{"Roulade"}
 	default:
-    	maxPV = 500
+    	maxPV = 200
     	pv = 100
     	attack = 6
     	skills = []string{"Coup de Poing"}

@@ -98,7 +98,7 @@ func (m *Monster) LynelPattern(player *Character, turn int) {
 
 func (m *Monster) KrrrooçePattern(player *Character, turn int) {
 	damage := m.Attack
-	if turn%10 == 0 {
+	if turn%5 == 0 {
 		damage *= 4
 	} 
 	player.PV -= damage
@@ -251,11 +251,11 @@ func CombatMenu(player *Character) {
     case 1:
         TrainingFight(player)
     case 2:
-        StartFight(player, InitMoblin("Moblin", 70, 70, 20), (*Monster).MoblinPattern)
+        StartFight(player, InitMoblin("Moblin", 100, 100, 20), (*Monster).MoblinPattern)
     case 3:
-        StartFight(player, InitLynel("Lynel", 150, 150, 50), (*Monster).LynelPattern)
+        StartFight(player, InitLynel("Lynel", 270, 270, 50), (*Monster).LynelPattern)
     case 4:
-        StartFight(player, InitKrrooçe("Krrooçe", 450, 450, 150), (*Monster).KrrrooçePattern)
+        StartFight(player, InitKrrooçe("Krrooçe", 450, 450, 75), (*Monster).KrrrooçePattern)
     case 5:
         fmt.Println("Retour au menu principal")
     default:
@@ -268,7 +268,7 @@ func CombatMenu(player *Character) {
 
 func TrainingFight(player *Character) {
 	player.FireBallUsed = false
-	bokoblin := InitBokoblin("Bokoblin", 40, 40, 5)
+	bokoblin := InitBokoblin("Bokoblin", 50, 50, 5)
 	turn := 1
 	for player.PV > 0 && bokoblin.PV > 0 {
 		CharTurn(player, &bokoblin, turn)
