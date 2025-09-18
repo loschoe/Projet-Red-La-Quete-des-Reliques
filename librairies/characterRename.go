@@ -4,6 +4,7 @@ package librairies
 
 import (
 	"fmt" // Pour les affichages 
+	"github.com/fatih/color"
 )
 
 // Focntion qui vérifie si la chaîne de caractères contient uniquement des lettres
@@ -37,40 +38,40 @@ func FormatName(s string) string {
 func CharacterCreation() string {
 	var input, confirm string
 	for {
-		fmt.Print("Voulez-vous un pseudo personnalisé ? (y/n) : ")
+		color.Cyan("Voulez-vous un pseudo personnalisé ? (y/n) : ")
 		fmt.Scanln(&confirm)
 
 		if confirm == "y" || confirm == "oui" {
 			// Saisie du pseudo
 			for {
-				fmt.Print("Entrez le nom de votre personnage : ")
+				color.Cyan("Entrez le nom de votre personnage : ")
 				fmt.Scanln(&input)
 
 				if !IsAlpha(input) {
-					fmt.Println("Erreur : le nom ne doit contenir que des lettres.")
+					color.Red("Erreur : le nom ne doit contenir que des lettres.")
 					continue
 				}
 
 				name := FormatName(input)
 				fmt.Printf("Nom proposé : %s\n", name)
 
-				fmt.Print("Voulez-vous garder ce nom ? (y/n) : ")
+				color.Cyan("Voulez-vous garder ce nom ? (y/n) : ")
 				fmt.Scanln(&confirm)
 
 				if confirm == "y" || confirm == "oui" {
 					return name
 				} else if confirm == "n" || confirm == "non" {
-					fmt.Println("Recommencez la saisie du nom.")
+					color.Red("Recommencez la saisie du nom.")
 					continue
 				} else {
-					fmt.Println("Réponse invalide, veuillez répondre par 'y' ou 'n'.")
+					color.Red("Réponse invalide, veuillez répondre par 'y' ou 'n'.")
 				}
 			}
 		} else if confirm == "n" || confirm == "non" {
 			// Le joueur ne veut pas de pseudo personnalisé
 			return ""
 		} else {
-			fmt.Println("Réponse invalide, veuillez répondre par 'y' ou 'n'.")
+			color.Red("Réponse invalide, veuillez répondre par 'y' ou 'n'.")
 		}
 	}
 }

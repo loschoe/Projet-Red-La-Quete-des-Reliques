@@ -211,7 +211,7 @@ func (c *Character) AccessEquipment() {
 func (c *Character) IsDead() {
 	if c.PV <= 0 {
 		color.HiRed("%s est mort ! ⚰️\n", c.Name)
-		c.PV = c.Max_PV / 2
+		c.PV = 80
 		color.Green("%s est ressuscité avec %d/%d PV ! ✨\n", c.Name, c.PV, c.Max_PV)
 	}
 }

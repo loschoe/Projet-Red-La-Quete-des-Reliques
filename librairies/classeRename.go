@@ -2,6 +2,7 @@ package librairies
 
 import (
 	"fmt"
+	"github.com/fatih/color"
 )
 
 // ---------------- CHOIX DE CLASSE ----------------
@@ -12,8 +13,7 @@ func ChooseClass() string {
 	classes := []string{"Hylien", "Zora", "Goron"}
 
 	for {
-		fmt.Println("Choisissez la classe de votre personnage : Hylien, Zora ou Goron.")
-		fmt.Print("Classe : ")
+		color.Cyan("Choisissez la classe de votre personnage : Hylien, Zora ou Goron.")
 		fmt.Scanln(&input)
 
 		input = FormatName(input) // Utilise la fonction déjà définie dans characterRename.go
@@ -28,12 +28,12 @@ func ChooseClass() string {
 		}
 
 		if !valid {
-			fmt.Println("Classe invalide ! Veuillez choisir parmi : Hylien, Zora ou Goron.")
+			color.Red("Classe invalide ! Veuillez choisir parmi : Hylien, Zora ou Goron.")
 			continue
 		}
 
-		fmt.Printf("Classe choisie : %s\n", input)
-		fmt.Print("Voulez-vous confirmer cette classe ? (y/n) : ")
+		color.Cyan("Classe choisie : %s\n", input)
+		color.Cyan("Voulez-vous confirmer cette classe ? (y/n) : ")
 		fmt.Scanln(&confirm)
 
 		if len(confirm) > 0 {
@@ -47,10 +47,10 @@ func ChooseClass() string {
 		if confirm == "y" || confirm == "o" { // 'o' pour "oui"
 			return input
 		} else if confirm == "n" {
-			fmt.Println("Recommencez la sélection de la classe.")
+			color.Red("Recommencez la sélection de la classe.")
 			continue
 		} else {
-			fmt.Println("Réponse invalide, veuillez répondre par 'y' ou 'n'.")
+			color.Red("Réponse invalide, veuillez répondre par 'y' ou 'n'.")
 		}
 	}
 }

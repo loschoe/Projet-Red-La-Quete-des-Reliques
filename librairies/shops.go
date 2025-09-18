@@ -18,6 +18,7 @@ type ShopItem struct {
 	PriceRubis int
 	PriceDiam  int
 	EffectPV   int // indicatif (affiché seulement), l’effet n’est pas appliqué dans le shop
+	Quantity int 
 }
 
 // Cette structure concerne les objets de la forge et leurs matériaux
@@ -31,34 +32,25 @@ type ForgeItem struct {
 
 // Stock global du magasin (persiste durant toute la partie)
 var shopItems = []ShopItem{
-	{"Arrow", 10, 0, 0},
-	{"Arrow", 10, 0, 0},
-	{"Arrow", 10, 0, 0},
-	{"Arrow", 10, 0, 0},
-	{"Bow", 5, 0, 0},
-	{"Cuir", 5, 0, 0},
-	{"Divine Venison", 25, 0, 25},
-	{"Divine Venison", 25, 0, 25},
-	{"Fairy", 50, 0, 55},
-	{"Fairy", 50, 0, 55},
-	{"Lingot", 3, 0, 0},
-	{"Lingot", 3, 0, 0},
-	{"Master Sword", 0, 2, 0},
-	{"Miasme", 25, 0, -45},
-	{"Miasme", 25, 0, -45},
-	{"Upgrade kit", 10, 0, 0},
-	{"Upgrade kit", 10, 0, 0},
-	{"Upgrade kit", 10, 0, 0},
-	{"Zelda Book", 50, 0, 10},
+	{"Arrow", 15, 0, 0, 5},
+	{"Bow", 20, 0, 0, 1},
+	{"Cuir", 10, 0, 0, 1},
+	{"Divine Venison", 30, 0, 25, 2},
+	{"Fairy", 60, 0, 55, 10},
+	{"Lingot", 15, 0, 0, 2},
+	{"Master Sword", 0, 2, 0, 1},
+	{"Miasme", 25, 0, -45, 5},
+	{"Upgrade kit", 12, 0, 0, 3},
+	{"Zelda Book", 100, 0, 10, 1},
 }
 
 // ------------- Fonctions du magasin ----------------
 
 // Afficher les objets du magasin
 func printShop(items []ShopItem) {
-	fmt.Println("+----+-----------------+-------------+--------+")
-	fmt.Printf("| %-2s | %-15s | %-11s | %-6s |\n", "N°", "Items", "Prix", "PV")
-	fmt.Println("+----+-----------------+-------------+--------+")
+	fmt.Println("+----+-----------------+-------------+--------+-------+")
+	fmt.Printf("| %-2s | %-15s | %-11s | %-6s | %-5s |\n", "N°", "Items", "Prix", "PV", "Qté")
+	fmt.Println("+----+-----------------+-------------+--------+-------+")
 
 	for i, item := range items {
 		// Prix affiché
@@ -77,20 +69,23 @@ func printShop(items []ShopItem) {
 			pv = fmt.Sprintf("%+d", item.EffectPV)
 		}
 
-		fmt.Printf("| %-2d | %-15s | %-11s | %-6s |\n", i+1, item.Name, price, pv)
+		// Ligne d’un item
+		fmt.Printf("| %-2d | %-15s | %-11s | %-6s | %-5d |\n",
+			i+1, item.Name, price, pv, item.Quantity)
 	}
 
-	fmt.Println("+----+-----------------+-------------+--------+")
-	fmt.Printf("| %-2s | %-15s | %-11s | %-6s |\n", "0", "Quitter", "", "")
-	fmt.Println("+----+-----------------+-------------+--------+")
+	fmt.Println("+----+-----------------+-------------+--------+-------+")
+	fmt.Printf("| %-2s | %-15s | %-11s | %-6s | %-5s |\n", "0", "Quitter", "", "", "")
+	fmt.Println("+----+-----------------+-------------+--------+-------+")
 }
+
 
 // Interaction avec le marchand
 func Merchant(personnage *Character) {
 	shopArt := `
                               _       
   /\/\   __ _  __ _  __ _ ___(_)_ __  
- /    \ / _' |/ _' |/ _' / __| | '_ \ 
+ /    \ / _' |/ _' |/ _' |/ _' / __| | '_ \ 
 / /\/\ \ (_| | (_| | (_| \__ \ | | | |
 \/    \/\__,_|\__, |\__,_|___/_|_| |_| 
               |___/                   
@@ -123,19 +118,19 @@ func Merchant(personnage *Character) {
 		}
 
 		if choix < 1 || choix > len(shopItems) {
-			fmt.Println("Choix invalide.")
+			color.Red("Choix invalide.")
 			continue
 		}
 
-		selectedItem := shopItems[choix-1]
+		selectedItem := &shopItems[choix-1] // pointeur pour modifier directement Quantity
 
 		// Vérification de l’argent
 		if selectedItem.PriceRubis > personnage.Rubis {
-			fmt.Println("Pas assez de Rubis !")
+			color.Red("Pas assez de Rubis !")
 			continue
 		}
 		if selectedItem.PriceDiam > personnage.CountItem("Diamant") {
-			fmt.Println("Pas assez de Diamants !")
+			color.Red("Pas assez de Diamants !")
 			continue
 		}
 
@@ -149,12 +144,16 @@ func Merchant(personnage *Character) {
 		if selectedItem.Name == "Upgrade kit" {
 			personnage.UpgradeInventorySlot()
 		} else {
-			// Tous les autres vont dans l’inventaire
 			personnage.AddInventory(selectedItem.Name)
 		}
 
-		// Retirer l’item du shop
-		shopItems = append(shopItems[:choix-1], shopItems[choix:]...)
+		// Décrémenter la quantité
+		selectedItem.Quantity--
+
+		// Retirer l’item si stock épuisé
+		if selectedItem.Quantity <= 0 {
+			shopItems = append(shopItems[:choix-1], shopItems[choix:]...)
+		}
 	}
 }
 

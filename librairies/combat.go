@@ -282,8 +282,8 @@ func TrainingFight(player *Character) {
 		color.Yellow("Retour au menu principal...\n")
 	} else if bokoblin.PV <= 0 {
 		color.Yellow("\n%s a été vaincu 🎉\n", bokoblin.Name)
-		player.Rubis += 25
-		color.Green("%s reçoit 25 rubis !\n", player.Name)
+		player.Rubis += 10
+		color.Green("%s reçoit 10 rubis !\n", player.Name)
 		player.Level += 1
 		color.Green("%s passe au niveau supérieur !\n", player.Name)
 		//  Augmentation de l'attaque si Bokoblin vaincu
@@ -313,9 +313,9 @@ func StartFight(player *Character, monster Monster, pattern func(*Monster, *Char
 		case "Moblin":
 			player.FireBallUsed = false
 			// Si c’est un Moblin
-			player.Rubis += 30
+			player.Rubis += 35
 			player.Level += 2
-			color.Green("%s reçoit 30 rubis et passe de 2 niveaux !\n", player.Name)
+			color.Green("%s reçoit 35 rubis et passe de 2 niveaux !\n", player.Name)
 			// Si Moblin est mort, augmenter l'attaque de 5
 			player.Attack += 5
 			color.HiMagenta("💥 Votre attaque augmente de 5 ! Nouvelle attaque : %d\n", player.Attack)
