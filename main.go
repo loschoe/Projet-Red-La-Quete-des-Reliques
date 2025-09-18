@@ -5,7 +5,7 @@ package main
 
 import (
 	"PROJET_RED/librairies"			// Notre librairie contenant les fichiers de code 	
-	"fmt"							// Certains prints en dépendent 
+	"fmt"						// Certains prints en dépendent 
 	"github.com/fatih/color"		// Afficher des lignes en couleur dans la console 
 )
 
@@ -21,6 +21,7 @@ func menuItem(text string, c *color.Color) {
 
 func Menu(c1 *librairies.Character) {
 	for {
+		librairies.ClearScreen()
 		fmt.Println(color.WhiteString("+-------------------------------+"))
 		color.White("|             MENU              |")
 		fmt.Println(color.WhiteString("+-------------------------------+"))
@@ -46,19 +47,26 @@ func Menu(c1 *librairies.Character) {
 		switch choice {
 		case "P":
 			librairies.DisplayInfo(c1)
+			librairies.Pause()
 		case "I":
 			c1.AccessInventory()
+			librairies.Pause()
 		case "E":
 			c1.AccessEquipment()
+			librairies.Pause()
 		case "S":
 			c1.TakePot()
+			librairies.Pause()
 		case "R":
-			c1.TakeMeat()	
+			c1.TakeMeat()
+			librairies.Pause()
 		case "U":
 			c1.Poisonbottle()
 		case "M":
+			librairies.ClearScreen()
 			librairies.Merchant(c1)
 		case "F":
+			librairies.ClearScreen()
 			librairies.Forge(c1)
 		case "C":
 			librairies.CombatMenu(c1)
@@ -76,8 +84,6 @@ func Menu(c1 *librairies.Character) {
 	}
 }
 
-
-// ----------------- LANCEMENT ------------------------------
 // ----------------- LANCEMENT ------------------------------
 func main() {
 	// Lancer le jeu

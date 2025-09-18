@@ -7,6 +7,7 @@ package librairies
 import (
 	"fmt" 						//Certains affichages 
 	"github.com/fatih/color"    //Les couleurs en console 
+	"strings"
 	"time"                      //Dans certaines attaques il nous faut une source de temps 
 )
 
@@ -120,112 +121,100 @@ func CombatTurn(player *Character, monster *Monster, turn int) {
  | |___| (_) | | | | | | |_) | (_| | |_ 
   \_____\___/|_| |_| |_|_.__/ \__,_|\__|
 `
+	ClearScreen()
 	color.Red("%s\n", shopArt)
-	color.Blue("\n============== Tour %d ==============\n", turn)
-	time.Sleep(1 * time.Second)
-	color.Green("Adversaire : %s | PV : %d/%d\n", monster.Name, monster.PV, monster.Max_PV)
-	color.Green("%s | PV : %d/%d\n\n", player.Name, player.PV, player.Max_PV)
+	    color.Red("\n============== Tour %d ==============\n", turn)
+    time.Sleep(500 * time.Millisecond)
 
-	fmt.Println("\n=== Attaques disponibles ===")
+    color.Green("Adversaire : %s | PV : %d/%d\n", monster.Name, monster.PV, monster.Max_PV)
+    color.Green("%s | PV : %d/%d\n\n", player.Name, player.PV, player.Max_PV)
 
-	// Affiche toutes les compétences de la classe choisie
-	for i, skill := range player.Skills {
-    	color.Red("%d. Attaque %s", i+1, skill)
-	}
-
-	// Master Sword → débloque "Épée tranchante"
-	if player.HasItem("Master Sword") {
-    	color.Red("2. Épée tranchante (50 dégâts)")
-	}
-
-	// Arc → débloque "Pluie de flèches"
-	if player.HasItem("Bow") {
-    	color.Red("3. Pluie de flèches (100 dégâts)")
-	}
-
-	// Zelda Book → débloque "Boule de feu" 
-	if player.HasItem("Zelda Book") && !player.FireBallUsed {
-    color.Red("4. Zelda Book (170 dégâts, +30 PV)")
-	}
-
-	// Inventaire
-	color.Yellow("5. Inventaire / Utiliser objet")
-
-	// Fuite
-	color.Cyan("6. Fuir (retour menu)")
-
-	fmt.Print("\nVotre choix : ")
-
-
-	var choice int
-	fmt.Scanln(&choice)
-
-	switch choice {
-
-	case 1:
-		damage := player.Attack
-		monster.PV -= damage
-		if monster.PV < 0 {
-			monster.PV = 0
-		}
-		color.Red("\n%s attaque et inflige %d dégâts à %s !\n", player.Name, damage, monster.Name)
-		time.Sleep(1 * time.Second)
-		color.Green("PV restants de %s : %d/%d\n\n", monster.Name, monster.PV, monster.Max_PV)
-
-	case 2:
-		player.UseMasterSword(monster)
-		time.Sleep(1 * time.Second)
-
-	case 3:
-		player.UseBow(monster)
-		time.Sleep(1 * time.Second)
-
-	case 4:
-    if !player.FireBallUsed {
-        player.UseFireBall(monster)
-        player.FireBallUsed = true 
-    } else {
-        fmt.Println("Vous avez déjà utilisé Fire Ball ce combat !")
+    fmt.Println("=== Attaques disponibles ===")
+    for i, skill := range player.Skills {
+        color.Red("%d. Attaque %s", i+1, skill)
     }
-    time.Sleep(1 * time.Second)
 
+    if player.HasItem("Master Sword") {
+        color.Red("2. Épée tranchante (50 dégâts)")
+    }
+    if player.HasItem("Bow") {
+        color.Red("3. Pluie de flèches (100 dégâts)")
+    }
+    if player.HasItem("Zelda Book") && !player.FireBallUsed {
+        color.Red("4. Zelda Book (170 dégâts, +30 PV)")
+    }
 
-	case 5:
-		player.AccessInventory()
-		fmt.Print("Choisissez un objet à utiliser : ")
-		var itemChoice int
-		fmt.Scanln(&itemChoice)
-		if itemChoice < 1 || itemChoice > len(player.Inventory) {
-			fmt.Println("Choix invalide !")
-			return
-		}
-		item := player.Inventory[itemChoice-1]
-		switch item {
-		case "Fairy":
-			player.TakePot()
-			player.RemoveItemAt(itemChoice - 1)
-		case "Miasme":
-			var choix int
-			fmt.Println("Que voulez-vous faire avec le poison ? (1 = boire, 2 = lancer sur le monstre) :")
-			fmt.Scanln(&choix)
-			if choix == 1 {
-				player.Poisonbottle()
-			} else if choix == 2 {
-				player.PoisonPot(monster)
-			} else {
-				fmt.Println("Choix invalide, aucune action effectuée.")
-			}
-		default:
-			fmt.Println("Cet objet ne peut pas être utilisé !")
-		}
+    color.Yellow("5. Inventaire / Utiliser objet")
+    color.Cyan("6. Fuir (retour menu)")
 
-	case 6:
-		fmt.Println("Vous prenez la fuite... retour au menu principal.")
-		player.PV = 0
+    fmt.Print("\nVotre choix : ")
+    var choice int
+    fmt.Scanln(&choice)
 
-	default:
-		fmt.Println("Choix invalide, vous perdez votre tour !")
-	}
+    switch choice {
+    case 1:
+        damage := player.Attack
+        monster.PV -= damage
+        if monster.PV < 0 { monster.PV = 0 }
+        color.Red("\n%s attaque et inflige %d dégâts à %s !\n", player.Name, damage, monster.Name)
+        color.Green("PV restants de %s : %d/%d\n\n", monster.Name, monster.PV, monster.Max_PV)
+
+    case 2:
+        player.UseMasterSword(monster)
+
+    case 3:
+        player.UseBow(monster)
+
+    case 4:
+        if !player.FireBallUsed {
+            player.UseFireBall(monster)
+            player.FireBallUsed = true
+        } else {
+            fmt.Println("Vous avez déjà utilisé le sort dans ce combat !")
+        }
+
+    case 5:
+        player.AccessInventory()
+        fmt.Print("Choisissez un objet à utiliser : ")
+        var itemChoice int
+        fmt.Scanln(&itemChoice)
+        if itemChoice >= 1 && itemChoice <= len(player.Inventory) {
+            item := player.Inventory[itemChoice-1]
+            switch item {
+            case "Fairy":
+                player.TakePot()
+                player.RemoveItemAt(itemChoice - 1)
+            case "Miasme":
+                var choix int
+                fmt.Println("Que voulez-vous faire avec le poison ? (1 = boire, 2 = lancer sur le monstre) :")
+                fmt.Scanln(&choix)
+                if choix == 1 {
+                    player.Poisonbottle()
+                } else if choix == 2 {
+                    player.PoisonPot(monster)
+                } else {
+                    fmt.Println("Choix invalide, aucune action effectuée.")
+                }
+            default:
+                fmt.Println("Cet objet ne peut pas être utilisé !")
+            }
+        } else {
+            fmt.Println("Choix invalide !")
+        }
+        Pause()
+
+    case 6:
+        fmt.Println("Vous prenez la fuite... retour au menu principal.")
+        player.PV = 0
+        Pause()
+	
+	//Option TRICHE !!
+	case 00:
+		player.Attack = 5000	
+    default:
+        fmt.Println("Choix invalide, vous perdez votre tour !")
+        Pause()
+    }
 }
 
 func CharTurn(player *Character, monster *Monster, turn int) {
@@ -234,15 +223,36 @@ func CharTurn(player *Character, monster *Monster, turn int) {
 
 // ------------------- Menu Combat -------------------
 func CombatMenu(player *Character) {
-	color.Cyan("+---------------------------------+")
-    color.Cyan("|        Choix du combat          |")
-	color.Cyan("+---------------------------------+")
-    color.Yellow("|⚔️  Duel d'entraînement (Bokoblin)|")
-    color.Blue("|💀 Combat Boss (Moblin)          |")
-    color.Green("|🐴 Combat Boss (Lynel)           |")
-    color.Red("|🍔 Combat Boss (Krrooçe)         |")
-	color.Cyan("+---------------------------------+")
-    fmt.Print("\nVotre choix : ")
+	totalWidth := 33 // largeur interne entre les "|"
+
+	// Bordures et titre
+	fmt.Println(color.WhiteString("+---------------------------------+"))
+	fmt.Println(color.CyanString("|        Choix du combat          |"))
+	fmt.Println(color.WhiteString("+---------------------------------+"))
+
+	// Fonction utilitaire pour afficher une ligne du menu
+	menuItem := func(text string, c *color.Color) {
+		// Compléter avec des espaces pour atteindre la largeur interne
+		if len(text) < totalWidth {
+			text += strings.Repeat(" ", totalWidth-len(text))
+		}
+		fmt.Println(
+			color.WhiteString("|") +
+				c.Sprint(text) +
+				color.WhiteString("|"),
+		)
+	}
+
+	// Lignes du menu
+	menuItem("⚔️  Duel d'entraînement (Bokoblin)", color.New(color.FgYellow))
+	menuItem("💀 Combat Boss (Moblin)          ", color.New(color.FgBlue))
+	menuItem("🐴 Combat Boss (Lynel)           ", color.New(color.FgGreen))
+	menuItem("🍔 Combat Boss (Krrooçe)         ", color.New(color.FgRed))
+
+	// Bordure finale
+	fmt.Println(color.WhiteString("+---------------------------------+"))
+
+	fmt.Print("\nVotre choix : ")
 
 	var choice int
 	fmt.Scanln(&choice)
@@ -274,12 +284,14 @@ func TrainingFight(player *Character) {
 		CharTurn(player, &bokoblin, turn)
 		if bokoblin.PV > 0 && player.PV > 0 {
 			bokoblin.GoblinPattern(player, turn)
+			Pause()
 		}
 		turn++
 	}
 	if player.PV <= 0 {
 		color.Red("\n%s a été vaincu 💀\n", player.Name)
 		color.Yellow("Retour au menu principal...\n")
+		Pause()
 	} else if bokoblin.PV <= 0 {
 		color.Yellow("\n%s a été vaincu 🎉\n", bokoblin.Name)
 		player.Rubis += 10
@@ -290,6 +302,7 @@ func TrainingFight(player *Character) {
 		player.Attack += 4
 		color.HiMagenta("💥 Votre attaque augmente de 4 ! Nouvelle attaque : %d\n", player.Attack)
 		color.Yellow("\nRetour au menu principal...\n")
+		Pause()
 	}
 }
 
@@ -298,17 +311,25 @@ func TrainingFight(player *Character) {
 func StartFight(player *Character, monster Monster, pattern func(*Monster, *Character, int)) {
 	player.FireBallUsed = false
 	turn := 1
+	
+	ClearScreen()
+
 	for player.PV > 0 && monster.PV > 0 {
 		CharTurn(player, &monster, turn)
 		if monster.PV > 0 && player.PV > 0 {
 			pattern(&monster, player, turn)
+			Pause()
 		}
 		turn++
 	}
+
 	if player.PV <= 0 {
 		color.Red("\n%s a été vaincu 💀\n", player.Name)
+		Pause()
 	} else if monster.PV <= 0 {
 		color.Yellow("\n%s a été vaincu 🎉\n", monster.Name)
+		Pause()
+		
 		switch monster.Name {
 		case "Moblin":
 			player.FireBallUsed = false
@@ -319,6 +340,7 @@ func StartFight(player *Character, monster Monster, pattern func(*Monster, *Char
 			// Si Moblin est mort, augmenter l'attaque de 5
 			player.Attack += 5
 			color.HiMagenta("💥 Votre attaque augmente de 5 ! Nouvelle attaque : %d\n", player.Attack)
+			Pause()
 		case "Lynel":
 			// Si c’est un Lynel
 			drops := []string{"Diamant", "Tissu royal"}
@@ -334,6 +356,7 @@ func StartFight(player *Character, monster Monster, pattern func(*Monster, *Char
 			player.Rubis += 100
 			player.Level += 5
 			color.Green("%s reçoit 100 rubis et augmente de 5 niveaux !\n", player.Name)
+			Pause()
 
 		case "Krrooçe":
 			// Si c’est Krrrooçe
