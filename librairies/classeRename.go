@@ -1,3 +1,5 @@
+// Ce fichier contient toutes les fonctions nécéssaires pour personnaliser son personnage et changer sa classe.
+// Le paquet de la librairie où sont stockées les fonctions 
 package librairies
 
 import (
@@ -57,24 +59,20 @@ func ChooseClass() string {
 
 // ---------------- CREATION DE PERSONNAGE ----------------
 
-// Crée un personnage complet avec nom, classe, stats et inventaire
-// ---------------- CREATION DE PERSONNAGE ----------------
-
-// Crée un personnage complet avec nom, classe, stats et inventaire
 func CreateCharacter() Character {
-	// 1️⃣ Choix du pseudo
+	// Choix du pseudo
 	name := CharacterCreation()
 	if name == "" {
 		name = "Link" // Nom par défaut si pas de pseudo
 	}
 
-	// 2️⃣ Choix de la classe
+	// Choix de la classe
 	classe := ChooseClass()
 
-	// 3️⃣ Initialisation des caractéristiques selon la classe
-	var maxPV, pv, attack, rubis int // <-- ajout de rubis ici
+	// Initialisation des caractéristiques selon la classe
+	var maxPV, pv, attack, rubis int
 	var skills []string
-	rubis = 100 // Tous les personnages commencent avec 100 rubis
+	rubis = 100
 
 	switch classe {
 	case "Hylien":
@@ -100,7 +98,7 @@ func CreateCharacter() Character {
     	skills = []string{"Coup de Poing"}
 	}
 
-	// 4️⃣ Inventaire et équipement par défaut
+	// Inventaire et équipement par défaut
 	inventory := [10]string{
 		"...", 
 		"...",
@@ -115,7 +113,7 @@ func CreateCharacter() Character {
 	}
 	equipment := [3]string{"...", "...", "..."}
 
-	// 5️⃣ Création du personnage
+	// Création du personnage
 	player := InitCharacter(name, classe, 1, maxPV, pv, inventory, equipment)
 	player.Attack = attack
 	player.Skills = skills

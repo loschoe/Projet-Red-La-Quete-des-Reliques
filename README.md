@@ -16,7 +16,7 @@ Le jeu propose :
 - 💰 **Économie** : rubis, marchands, forgeron et crafting  
 - ⚔️ **Combats au tour par tour** contre des monstres (pattern d’attaque, coups critiques)  
 - 🧪 **Potions et objets spéciaux** (ex : Fairy, Miasme – à utiliser sur soi ou sur l’ennemi)  
-- ⭐ **Progression du joueur** : gain d’expérience, montée en niveau, récompenses  
+- ⭐ **Progression du joueur** : montée en niveau, récompenses...  
 - 🖼️ **Interface ASCII colorée immersive** pour renforcer l’ambiance rétro  
 
 ---
@@ -37,4 +37,12 @@ go get github.com/fatih/color
 ## ▶️ Pour exécuter le code :
 ```bash
 go run main.go
+// Compilé 
+go run .
 ```
+## 💡 Astuces 
+* Pensez à acheter les bons items dès le début de la partie (arc, flèches, livre, potions...)
+* Le deuxième diamant pour la lame purificatrice est caché parmis les montres 
+* Une option triche est disponible pour vaincre facilement les boss ! A vous de la trouver !!
+
+2 easter eggs sont cachés dans le jeu !

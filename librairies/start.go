@@ -28,7 +28,7 @@ func StartGame() {
 	||:	||     |+++++++|      ||:    |
      __	||:	||     |+++++++|     _||_    |
 ___--	'--~~____|     |+++++__|----~    ~---,
-		 ~---__|,--~'                  ~~---
+		 ~---__|,--~'                  00---
 `
 	introText := `
       ______ _              ____           _   _
@@ -73,10 +73,16 @@ ___--	'--~~____|     |     __|----~    ~---,
       / /  | | | |  __/  / /___|  (_| \__ \ |_| |  __/
       \/   |_| |_|\___|  \_____/\___,_|___/\__|_|\___|
 
-	  Bravo vous avez terminer le jeu !!
+Bravo, vous avez résussi à libérer Hyrule ! 
+Merci d'avoir aidé les cuisiniers du château contre l'invasion de Krrrooçe !
+
+©️  Développeurs : Hugo & Louis - B1 Ynov Campus - 2025
+
 	`
 	ClearScreen()
 	color.Yellow("%s\n", asciiArtt)
 	color.Red("%s\n", conclText)
 	fmt.Scanln()
 }
+
+// Bon courage pour trouver l'easter egg caché dans le jeu !!

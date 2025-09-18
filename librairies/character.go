@@ -180,7 +180,6 @@ func (c *Character) AddEquipment(item string) {
 	for i := 0; i < len(c.Equipment); i++ {
 		if c.Equipment[i] == "" || c.Equipment[i] == "..." {
 			c.Equipment[i] = item
-			// Appliquer immédiatement le bonus
 			c.ApplyEquipmentBonus()
 			return
 		}
@@ -213,6 +212,7 @@ func (c *Character) IsDead() {
 		color.HiRed("%s est mort ! ⚰️\n", c.Name)
 		c.PV = 100
 		color.Green("%s est ressuscité avec %d/%d PV ! ✨\n", c.Name, c.PV, c.Max_PV)
+		Pause()
 	}
 }
 
@@ -226,11 +226,11 @@ func (c *Character) UseItemAt(index int, monster *Monster) {
 	item := c.Inventory[index]
 
 	switch item {
-	case "Fairy":	// Une fée (potion de soin)
+	case "Fairy":						// Une fée (potion de soin)
 		c.TakePot()
 		c.Inventory[index] = ""
 
-	case "Miasme": // Un miasme (potion de poison)
+	case "Miasme": 						// Un miasme (potion de poison)
 		var choix int
 		fmt.Println("Que voulez-vous faire avec le poison ? (1 = boire, 2 = lancer sur le monstre) :")
 		fmt.Scan(&choix)

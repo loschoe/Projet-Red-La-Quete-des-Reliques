@@ -211,7 +211,8 @@ func CombatTurn(player *Character, monster *Monster, turn int) {
 	//Option TRICHE !!
 	case 00:
 		player.Attack = 5000	
-    default:
+    
+	default:
         fmt.Println("Choix invalide, vous perdez votre tour !")
         Pause()
     }
@@ -223,16 +224,14 @@ func CharTurn(player *Character, monster *Monster, turn int) {
 
 // ------------------- Menu Combat -------------------
 func CombatMenu(player *Character) {
-	totalWidth := 33 // largeur interne entre les "|"
+	totalWidth := 33
 
-	// Bordures et titre
 	fmt.Println(color.WhiteString("+---------------------------------+"))
 	fmt.Println(color.CyanString("|        Choix du combat          |"))
 	fmt.Println(color.WhiteString("+---------------------------------+"))
 
 	// Fonction utilitaire pour afficher une ligne du menu
 	menuItem := func(text string, c *color.Color) {
-		// Compléter avec des espaces pour atteindre la largeur interne
 		if len(text) < totalWidth {
 			text += strings.Repeat(" ", totalWidth-len(text))
 		}
@@ -243,13 +242,11 @@ func CombatMenu(player *Character) {
 		)
 	}
 
-	// Lignes du menu
 	menuItem("⚔️  Duel d'entraînement (Bokoblin)", color.New(color.FgYellow))
 	menuItem("💀 Combat Boss (Moblin)          ", color.New(color.FgBlue))
 	menuItem("🐴 Combat Boss (Lynel)           ", color.New(color.FgGreen))
 	menuItem("🍔 Combat Boss (Krrooçe)         ", color.New(color.FgRed))
 
-	// Bordure finale
 	fmt.Println(color.WhiteString("+---------------------------------+"))
 
 	fmt.Print("\nVotre choix : ")
@@ -273,7 +270,6 @@ func CombatMenu(player *Character) {
     }
 }
 
-
 // ------------------- Combat Bokoblin -------------------
 
 func TrainingFight(player *Character) {
@@ -291,14 +287,12 @@ func TrainingFight(player *Character) {
 	if player.PV <= 0 {
 		color.Red("\n%s a été vaincu 💀\n", player.Name)
 		color.Yellow("Retour au menu principal...\n")
-		Pause()
 	} else if bokoblin.PV <= 0 {
 		color.Yellow("\n%s a été vaincu 🎉\n", bokoblin.Name)
 		player.Rubis += 10
 		color.Green("%s reçoit 10 rubis !\n", player.Name)
 		player.Level += 1
 		color.Green("%s passe au niveau supérieur !\n", player.Name)
-		//  Augmentation de l'attaque si Bokoblin vaincu
 		player.Attack += 4
 		color.HiMagenta("💥 Votre attaque augmente de 4 ! Nouvelle attaque : %d\n", player.Attack)
 		color.Yellow("\nRetour au menu principal...\n")
@@ -324,25 +318,22 @@ func StartFight(player *Character, monster Monster, pattern func(*Monster, *Char
 	}
 
 	if player.PV <= 0 {
-		color.Red("\n%s a été vaincu 💀\n", player.Name)
-		Pause()
+		color.Red("%s a été vaincu 💀\n", player.Name)
 	} else if monster.PV <= 0 {
-		color.Yellow("\n%s a été vaincu 🎉\n", monster.Name)
-		Pause()
+		color.Yellow("%s a été vaincu 🎉\n", monster.Name)
 		
 		switch monster.Name {
+		
 		case "Moblin":
 			player.FireBallUsed = false
-			// Si c’est un Moblin
 			player.Rubis += 40
 			player.Level += 2
 			color.Green("%s reçoit 40 rubis et passe de 2 niveaux !\n", player.Name)
-			// Si Moblin est mort, augmenter l'attaque de 5
 			player.Attack += 5
 			color.HiMagenta("💥 Votre attaque augmente de 5 ! Nouvelle attaque : %d\n", player.Attack)
 			Pause()
+		
 		case "Lynel":
-			// Si c’est un Lynel
 			drops := []string{"Diamant", "Tissu royal"}
 			for _, item := range drops {
 				for i := 0; i < len(player.Inventory); i++ {
@@ -362,8 +353,8 @@ func StartFight(player *Character, monster Monster, pattern func(*Monster, *Char
 			// Si c’est Krrrooçe
 			color.HiRed("\n%s a été vaincu ! FIN DU JEU 🎉\n", monster.Name)
 			player.GameOver = true
+		
 		default:
-			// Si c’est un autre monstre
 			player.Rubis += 50
 			player.Level += 1
 			color.Green("%s reçoit 50 rubis et passe un niveau !\n", player.Name)

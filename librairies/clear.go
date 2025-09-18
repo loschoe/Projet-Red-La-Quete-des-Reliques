@@ -1,3 +1,5 @@
+// Ce fichier contient la fonction clear console pour un affichage dynamique 
+// Le paquet de la librairie où sont stockées les fonctions 
 package librairies
 
 import(

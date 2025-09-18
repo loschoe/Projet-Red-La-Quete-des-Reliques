@@ -42,7 +42,6 @@ func CharacterCreation() string {
 		fmt.Scanln(&confirm)
 
 		if confirm == "y" || confirm == "oui" {
-			// Saisie du pseudo
 			for {
 				color.Cyan("Entrez le nom de votre personnage : ")
 				fmt.Scanln(&input)
@@ -68,7 +67,6 @@ func CharacterCreation() string {
 				}
 			}
 		} else if confirm == "n" || confirm == "non" {
-			// Le joueur ne veut pas de pseudo personnalisé
 			return ""
 		} else {
 			color.Red("Réponse invalide, veuillez répondre par 'y' ou 'n'.")

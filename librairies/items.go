@@ -5,7 +5,7 @@ package librairies
 
 import (
 	"github.com/fatih/color" // Couleurs 
-	"fmt" 				  // Pour les prints
+	"fmt" 				 	 // Pour les prints
 )
 
 //=================== EPEE ==================================
@@ -123,7 +123,7 @@ func (player *Character) UseFireBall(monster *Monster) {
     color.Green("%s récupère %d PV ! PV actuels : %d/%d\n\n", player.Name, heal, player.PV, player.Max_PV)
     color.Green("PV restants de %s : %d/%d\n\n", monster.Name, monster.PV, monster.Max_PV)
 
-    player.FireBallUsed = true // ← marque Fire Ball comme utilisée
+    player.FireBallUsed = true
 }
 
 // ================== Equipement ================================

@@ -11,13 +11,12 @@ import (
 
 // ------------- Structures ----------------
 
-
 // Cette structure définit les tarifs et effets des objets du magasin
 type ShopItem struct {
 	Name       string
 	PriceRubis int
 	PriceDiam  int
-	EffectPV   int // indicatif (affiché seulement), l’effet n’est pas appliqué dans le shop
+	EffectPV   int 																// indicatif (affiché seulement), l’effet n’est pas appliqué dans le shop
 	Quantity int 
 }
 
@@ -25,14 +24,14 @@ type ShopItem struct {
 type ForgeItem struct {
 	Name      string
 	Materials map[string]int
-	Gender    string // "m", "f", "fp"
+	Gender    string // "m", "f", "fp" 											// Simplement pour que le print soit accordé en genre et en nombre 
 }
 
 // ------------- Données du magasin ----------------
 
 // Stock global du magasin (persiste durant toute la partie)
 var shopItems = []ShopItem{
-	{"Arrow", 15, 0, 0, 5},
+	{"Arrow", 15, 0, 0, 8},														// Item, Rubis, Diamants, PV, Quantité 
 	{"Bow", 20, 0, 0, 1},
 	{"Cuir", 10, 0, 0, 1},
 	{"Divine Venison", 30, 0, 25, 2},
@@ -45,7 +44,6 @@ var shopItems = []ShopItem{
 }
 
 // ------------- Fonctions du magasin ----------------
-
 // Afficher les objets du magasin
 func printShop(items []ShopItem) {
 	fmt.Println("+----+-----------------+-------------+--------+-------+")
@@ -63,7 +61,7 @@ func printShop(items []ShopItem) {
 			price = "gratuit"
 		}
 
-		// PV affichés (info uniquement)
+		// PV affichés
 		pv := "-"
 		if item.EffectPV != 0 {
 			pv = fmt.Sprintf("%+d", item.EffectPV)
@@ -78,7 +76,6 @@ func printShop(items []ShopItem) {
 	fmt.Printf("| %-2s | %-15s | %-11s | %-6s | %-5s |\n", "0", "Quitter", "", "", "")
 	fmt.Println("+----+-----------------+-------------+--------+-------+")
 }
-
 
 // Interaction avec le marchand
 func Merchant(personnage *Character) {
@@ -122,7 +119,7 @@ func Merchant(personnage *Character) {
 			continue
 		}
 
-		selectedItem := &shopItems[choix-1] // pointeur pour modifier directement Quantity
+		selectedItem := &shopItems[choix-1]
 
 		// Vérification de l’argent
 		if selectedItem.PriceRubis > personnage.Rubis {
@@ -165,7 +162,7 @@ var forgeItems = []ForgeItem{
 	{"Bottes", map[string]int{"Cuir": 1}, "fp"},
 }
 
-// Affiche le menu du forgeron
+// Affiche le menu du forgeron en responsive 
 func printForgeMenu(items []ForgeItem) {
 	totalWidth := 48
 

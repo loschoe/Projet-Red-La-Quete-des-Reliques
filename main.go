@@ -5,7 +5,7 @@ package main
 
 import (
 	"PROJET_RED/librairies"			// Notre librairie contenant les fichiers de code 	
-	"fmt"						// Certains prints en dépendent 
+	"fmt"							// Certains prints en dépendent 
 	"github.com/fatih/color"		// Afficher des lignes en couleur dans la console 
 )
 
@@ -109,10 +109,10 @@ func main() {
 		"...",
 	}
 
-	// 1️⃣ Création complète du personnage (nom + classe + stats)
+	// Création complète du personnage (nom + classe + stats)
 	player := librairies.CreateCharacter()
 
-	// 2️⃣ Ajout de l’inventaire et de l’équipement de départ
+	// Ajout de l’inventaire et de l’équipement de départ
 	for i := 0; i < len(inventory); i++ {
 		if inventory[i] != "..." && inventory[i] != "" {
 			player.AddInventory(inventory[i])
