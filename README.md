@@ -26,7 +26,7 @@ Le jeu propose :
 Clonez le dépôt et placez-vous dans le dossier :  
 
 ```bash
-git clone https://github.com/votre-utilisateur/projet-red_nom-du-projet.git
+git clone https://github.com/loschoe/Projet-Red-The-Castle.git
 cd projet-red_nom-du-projet
 ```
 ## 📦 N'oubliez pas d'installer les librairies :
