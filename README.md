@@ -27,7 +27,7 @@ Clonez le dépôt et placez-vous dans le dossier :
 
 ```bash
 git clone https://github.com/loschoe/Projet-Red-The-Castle.git
-cd projet-red_nom-du-projet
+cd projet-red_the_castle
 ```
 ## 📦 N'oubliez pas d'installer les librairies :
 ```bash
